@@ -1,0 +1,31 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Rift Rewind</title>
+<body>
+<h3>Rift Rewind – Test Matches</h3>
+<div>
+  <label>Region:
+    <select id="region">
+      <option>americas</option><option>europe</option><option>asia</option><option>sea</option>
+    </select>
+  </label>
+  <label>Riot ID: <input id="riotId" placeholder="MK1Paris#NA1"></label>
+  <label>Mode:
+    <select id="mode">
+      <option>all</option><option>solo</option><option>flex</option>
+      <option>normal</option><option>aram</option><option>clash</option>
+    </select>
+  </label>
+  <button id="go">Fetch</button>
+</div>
+<pre id="out"></pre>
+<script>
+  document.getElementById('go').onclick = async () => {
+    const r = document.getElementById('region').value;
+    const id = document.getElementById('riotId').value.trim();
+    const m = document.getElementById('mode').value;
+    const res = await fetch(`/api/matches?region=${encodeURIComponent(r)}&riotId=${encodeURIComponent(id)}&mode=${encodeURIComponent(m)}`);
+    document.getElementById('out').textContent = await res.text();
+  };
+</script>
+</body>
