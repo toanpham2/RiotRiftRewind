@@ -3,8 +3,9 @@ from app.config import SPLITS
 from collections import Counter, defaultdict
 from math import exp
 from typing import Dict, List, Tuple, Optional
-
+import asyncio
 from app.config import SPLITS
+from app.riot_client import RiotClient
 
 QUEUE_BUCKET ={
   420: "solo",
@@ -26,11 +27,10 @@ ROLE_MAP = {
 def patch_tuple(game_version: str) -> Tuple[int, int]:
   """14.13.512.1234" -> (14, 13)"""
   try:
-    major, minor, *_ = game_version.split(".")
-    return (int(major), int(minor))
+    major, minor, *_ = (game_version or "").split(".")
+    return int(major), int(minor)
   except Exception:
-    return (0,0)
-
+    return (0, 0)
 
 def within_patch_range(game_version: str, lo: str, hi: str) -> bool:
   g = patch_tuple(game_version)
@@ -176,3 +176,61 @@ def pick_standout_metric(best: Optional[dict]) -> Optional[dict]:
       "background": {"kind": "icon", "ref": "cs"},
     }
   return None
+
+async def fetch_matches_for_split(
+    region: str,
+    puuid: str,
+    split: str,
+    *,
+    max_batches: int = 40,     # go deep: 40 * 100 = 4000 matches
+    batch_size: int = 100
+) -> List[dict]:
+  """
+  Page through match history and return only matches inside the split's patch window.
+  Details are fetched in parallel per page for speed.
+  """
+  if split not in SPLITS:
+    return []
+  lo, hi = SPLITS[split]
+  collected: List[dict] = []
+  start = 0
+
+  async with RiotClient() as rc:
+    for _ in range(max_batches):
+      ids = await rc.match_ids(region, puuid, start=start, count=batch_size)
+      if not ids:
+        break
+
+      # parallel detail fetch
+      results = await asyncio.gather(
+          *[rc.match(region, mid) for mid in ids],
+          return_exceptions=True
+      )
+      for m in results:
+        if isinstance(m, Exception):
+          continue
+        info = m.get("info", {})
+        gv = info.get("gameVersion", "")
+        if within_patch_range(gv, lo, hi):
+          collected.append(m)
+
+      # stop early if we already have a healthy sample
+      if len(collected) >= 50:
+        break
+
+      start += batch_size
+
+  return collected
+
+
+def filter_matches_by_bucket(matches: List[dict], bucket: str) -> List[dict]:
+  """
+  Keep only matches whose queueId maps to the requested bucket
+  (e.g., 'solo', 'flex', 'normal', 'aram', 'clash').
+  """
+  out = []
+  for m in matches:
+    qid = m.get("info", {}).get("queueId")
+    if QUEUE_BUCKET.get(qid) == bucket:
+      out.append(m)
+  return out

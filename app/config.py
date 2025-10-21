@@ -32,7 +32,7 @@ BEDROCK_MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20
 
 SPLITS = {
   # TODO: adjust patch ranges to your exact window once final
-  "s1": ("15.1",  "15.8"),
+  "s1": ("15.1",  "15.4"),
   "s2": ("15.9",  "15.16"),
   "s3": ("15.17", "15.24"),
 }

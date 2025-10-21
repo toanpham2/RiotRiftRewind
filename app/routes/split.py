@@ -1,155 +1,171 @@
-from app.config import SPLITS
-import json
-from typing import Optional, Literal, List
-
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from typing import Optional, Dict, Any
+import json
 
-from app.config import SPLITS
 from app.riot_client import RiotClient
+from app.config import SPLITS
 from app.services.split_agg import (
-  filter_matches_by_split,
+  fetch_matches_for_split,   # <— deep pagination per split
   classify_primary_mode,
   aggregate_best_champ,
   pick_standout_metric,
+  filter_matches_by_bucket,
 )
 from app.bedrock_client import coach_with_claude
 
 router = APIRouter(prefix="/api", tags=["split"])
 
-# ---------- Response models ----------
-class Rank(BaseModel):
-  tier: str
-  division: Optional[str] = None
-  lp: Optional[int] = None
 
-class AdviceBullet(BaseModel):
-  action: str
-  why: str
-  target: str
-
-class SplitAdvice(BaseModel):
-  summary: str
-  bullets: List[AdviceBullet]
-
-class SplitSummary(BaseModel):
-  splitId: str
-  patchRange: str
-  gamesAnalyzed: int
-  primaryQueue: Literal["solo", "flex", "normal", "aram", "clash", "unranked"]
-  mostPlayedRankType: Literal["solo", "flex", "unranked"]
-  rankNow: Optional[Rank] = None      # optional for hackathon
-  peakRank: Optional[Rank] = None     # optional for hackathon
-  bestChamp: Optional[dict] = None
-  standout: Optional[dict] = None
-  advice: Optional[SplitAdvice] = None
-
-# ---------- Helpers for Claude ----------
-def _build_advice_payload(splitId: str, patchRange: str, primary: str, best: Optional[dict], standout: Optional[dict]) -> dict:
+def _advice_payload(
+    split_id: str,
+    patch_range: str,
+    games_analyzed: int,
+    primary_queue: str,
+    best: Optional[dict],
+    standout: Optional[dict],
+) -> Dict[str, Any]:
+  """
+  Keep the payload compact. Claude does better with fewer, high-signal fields.
+  """
   return {
-    "splitId": splitId,
-    "patchRange": patchRange,
-    "primaryMode": primary,
-    "bestChamp": best,
-    "standout": standout,
+    "splitId": split_id,
+    "patchRange": patch_range,
+    "gamesAnalyzed": games_analyzed,
+    "primaryQueue": primary_queue or "unranked",
+    "bestChamp": best,       # {name, role, games, winrate, kda, csPerMin?, visionPerMin?}
+    "standout": standout,    # {label, value, context, background}
   }
 
-def _advice_from_claude(payload: dict) -> Optional[SplitAdvice]:
+
+def _claude_split_advice(payload: dict) -> Optional[dict]:
+  """
+  Ask Claude for a tiny, structured summary. JSON only.
+  """
   system = (
-    "You are Rift Rewind, a concise League coach. "
-    "Given split stats, write a two-sentence summary (strengths + one weakness) "
-    "and EXACTLY three actionable bullets with measurable targets. Output strict JSON only."
+    "You are Rift Rewind, a concise League of Legends coach. "
+    "Given split-level stats (one split only), return STRICT JSON with: "
+    "a two-sentence summary (<= 45 words total) and exactly three actionable bullets "
+    "with a measurable target. Be role-aware (support: vision; jungle: objectives; others: cs/dmg/kp). "
+    "If gamesAnalyzed is small (<5), emphasize stable champ/role and sample size."
   )
-  user = f"""SPLIT_DATA:
+
+  user = f"""DATA:
 {json.dumps(payload, ensure_ascii=False)}
 
 FORMAT:
 {{
-  "summary":"<two sentences, <=45 words total>",
-  "bullets":[
+  "summary": "<two sentences, <=45 words total>",
+  "bullets": [
     {{"action":"<what to do>","why":"<why>","target":"<measurable>"}},
     {{"action":"<what to do>","why":"<why>","target":"<measurable>"}},
     {{"action":"<what to do>","why":"<why>","target":"<measurable>"}}
   ]
 }}
 Rules:
-- Be role-aware: support -> vision; jungle -> objectives; others -> cs/dmg/kp/laning.
-- No markdown. No extra keys. JSON only."""
-  try:
-    raw = coach_with_claude(system, user, max_tokens=500, temperature=0.4)
-    data = json.loads(raw)
-    bullets: List[AdviceBullet] = []
-    for b in (data.get("bullets") or [])[:3]:
-      if all(k in b for k in ("action", "why", "target")):
-        bullets.append(AdviceBullet(**b))
-    if "summary" in data and len(bullets) == 3:
-      return SplitAdvice(summary=data["summary"], bullets=bullets)
-  except Exception:
-    return None
-  return None
+- JSON only, no markdown.
+- If bestChamp is null, avoid inventing a champ; give general, role-agnostic improvement targets.
+- Targets must be measurable (e.g., 'CS/min ≥ 6.5 over next 10 games', 'Vision/min ≥ 1.0', 'Deaths/game ≤ 4')."""
 
-# ---------- Endpoint ----------
-@router.get("/split-summary", response_model=SplitSummary)
-async def split_summary(region: str, riotId: str, split: str = "s1", withAdvice: bool = True):
+  try:
+    raw = coach_with_claude(system, user, max_tokens=600, temperature=0.4)
+    # guard against non-JSON replies
+    return json.loads(raw)
+  except Exception:
+    # fallback (don’t break the endpoint if Bedrock has a hiccup)
+    return {
+      "summary": "Unable to fetch AI advice right now. Your split stats are below.",
+      "bullets": [
+        {"action": "Play consistent role", "why": "Stabilize performance for analysis", "target": "10 games same role"},
+        {"action": "Focus one champion", "why": "Build mechanics & matchup depth", "target": "15+ games on one champ"},
+        {"action": "Reduce deaths", "why": "Win more close games", "target": "≤4 deaths/game over next 10 games"},
+      ],
+    }
+
+
+@router.get("/split-summary")
+async def split_summary(region: str, riotId: str, split: str):
   """
   Example:
     /api/split-summary?region=americas&riotId=MK1Paris%23NA1&split=s1
-  Accepts split in {"s1","s2","s3"} per Season 15.
+
+  Behavior:
+    - Deep-paginates history to find matches within the split's patch window.
+    - Computes primary queue, best champion, standout metric.
+    - Calls Claude for compact, measurable advice (JSON).
   """
   if "#" not in riotId and "%23" not in riotId:
     raise HTTPException(400, "riotId must be formatted as Name#TAG (e.g., MK1Paris#NA1)")
+  name, tag = riotId.replace("%23", "#").split("#", 1)
+
   if split not in SPLITS:
     raise HTTPException(400, f"split must be one of {list(SPLITS.keys())}")
 
-  name, tag = riotId.replace("%23", "#").split("#", 1)
-
-  # 1) Pull matches (cap count for perf; bump if you need more history)
-  async with RiotClient() as rc:
-    puuid = await rc.puuid_by_riot_id(region, name, tag)
-    ids = await rc.match_ids(region, puuid, start=0, count=50)
-    raw_matches = [await rc.match(region, mid) for mid in ids]
-
-  # 2) Filter by split patch window
   lo, hi = SPLITS[split]
-  split_matches = filter_matches_by_split(raw_matches, split)
   patch_range = f"{lo} - {hi}"
 
-  # 3) Primary queue detection + “mostPlayedRankType”
-  mode_info = classify_primary_mode(split_matches)
-  primary_queue = mode_info["primary"]
-  # best-effort for “mostPlayedRankType”
-  solo_ct = mode_info["dist"].get("solo", 0)
-  flex_ct = mode_info["dist"].get("flex", 0)
-  if solo_ct == 0 and flex_ct == 0:
-    most_rank = "unranked"
-  else:
-    most_rank = "solo" if solo_ct >= flex_ct else "flex"
+  # Resolve player
+  async with RiotClient() as rc:
+    puuid = await rc.puuid_by_riot_id(region, name, tag)
 
-  # 4) Best champ & role-aware standout
-  best = aggregate_best_champ(split_matches, puuid)
+  # Deep fetch just this split (the key fix so s1 isn’t empty)
+  raw_matches = await fetch_matches_for_split(region, puuid, split)
+  games_analyzed = len(raw_matches)
+
+  if games_analyzed == 0:
+    payload = _advice_payload(split, patch_range, 0, "unranked", None, None)
+    advice = _claude_split_advice(payload)
+    return {
+      "splitId": split,
+      "patchRange": patch_range,
+      "gamesAnalyzed": 0,
+      "primaryQueue": "unranked",
+      "mostPlayedRankType": "unranked",
+      "rankNow": None,
+      "peakRank": None,
+      "bestChamp": None,
+      "standout": None,
+      "advice": advice,
+    }
+
+  # Aggregate your metrics
+  primary_info = classify_primary_mode(raw_matches)
+  primary_bucket = primary_info.get("primary") or "unranked"
+  # If we somehow got 'unranked' but have normals/aram etc.,
+  # pick the bucket with the largest count from the dist
+  if primary_bucket == "unranked":
+    dist = primary_info.get("dist", {})
+    if dist:
+      primary_bucket = max(dist.items(), key=lambda kv: kv[1])[0]
+
+  # Filter matches to the most-played bucket before computing "best champ"
+  bucket_matches = (
+    filter_matches_by_bucket(raw_matches, primary_bucket)
+    if primary_bucket and primary_bucket != "unranked"
+    else raw_matches
+  )
+  best = aggregate_best_champ(raw_matches, puuid)
   standout = pick_standout_metric(best)
 
-  # 5) (Optional) rankNow / peakRank (stubbed)
-  rank_now = None
-  peak_rank = None
-
-  # 6) Pack response
-  result = SplitSummary(
-      splitId=split,
-      patchRange=patch_range,
-      gamesAnalyzed=len(split_matches),
-      primaryQueue=primary_queue,
-      mostPlayedRankType=most_rank,
-      rankNow=rank_now,
-      peakRank=peak_rank,
-      bestChamp=best,
+  # Build advice payload & call Claude
+  payload = _advice_payload(
+      split_id=split,
+      patch_range=patch_range,
+      games_analyzed=games_analyzed,
+      primary_queue=primary_info.get("primary", "unranked"),
+      best=best,
       standout=standout,
-      advice=None,
   )
+  advice = _claude_split_advice(payload)
 
-  # 7) Claude advice (optional)
-  if withAdvice:
-    payload = _build_advice_payload(split, patch_range, primary_queue, best, standout)
-    result.advice = _advice_from_claude(payload)
-
-  return result
+  return {
+    "splitId": split,
+    "patchRange": patch_range,
+    "gamesAnalyzed": games_analyzed,
+    "primaryQueue": primary_info.get("primary", "unranked"),
+    "mostPlayedRankType": primary_info.get("primary", "unranked"),
+    "rankNow": None,     # (optional) wire ranked endpoints if you want live rank/peak
+    "peakRank": None,
+    "bestChamp": best,
+    "standout": standout,
+    "advice": advice,
+  }
