@@ -13,6 +13,7 @@ class MatchBrief(BaseModel):
   queueId: int
   gameMode: str = ""
   durationSec: int = 0
+  patch: str = ""           # <-- add this
   you: YouBrief = Field(default_factory=YouBrief)
 
 class MatchesResponse(BaseModel):

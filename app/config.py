@@ -26,3 +26,15 @@ QUEUES = {
 #BedRock
 AWS_REGION =os.getenv("AWS_REGION", "us-east-2")
 BEDROCK_MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20240620-v1:0")
+
+# app/config.py
+# app/config.py
+
+SPLITS = {
+  # TODO: adjust patch ranges to your exact window once final
+  "s1": ("15.1",  "15.8"),
+  "s2": ("15.9",  "15.16"),
+  "s3": ("15.17", "15.24"),
+}
+
+
