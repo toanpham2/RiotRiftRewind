@@ -31,10 +31,14 @@ BEDROCK_MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-5-sonnet-20
 # app/config.py
 
 SPLITS = {
-  # TODO: adjust patch ranges to your exact window once final
   "s1": ("15.1",  "15.4"),
-  "s2": ("15.9",  "15.16"),
+  "s2": ("15.5",  "15.16"),
   "s3": ("15.17", "15.24"),
 }
 
-
+SPLIT_TIMES = {
+  # (start_iso, end_iso) — end is exclusive
+  "s1": ("2025-01-09T00:00:00Z", "2025-03-05T00:00:00Z"),
+  "s2": ("2025-03-05T00:00:00Z", "2025-08-13T00:00:00Z"),
+  "s3": ("2025-08-13T00:00:00Z", "2025-10-22T00:00:00Z"),
+}
