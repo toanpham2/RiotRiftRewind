@@ -275,8 +275,6 @@ def aggregate_overall_metrics(matches: List[dict], puuid: str) -> Optional[dict]
     "primaryRole": primary_role,
   }
 
-
-
 def aggregate_champ_table(matches: List[dict], puuid: str) -> List[dict]:
   if not matches:
     return []
@@ -366,7 +364,6 @@ def aggregate_champ_table(matches: List[dict], puuid: str) -> List[dict]:
       "score": round(score, 2),
     })
 
-
   rows.sort(key=lambda r: r["score"], reverse=True)
   return rows
 
@@ -433,8 +430,49 @@ async def fetch_matches_for_split(region: str, puuid: str, split: str,
           if not oldest_this_page or g_t < oldest_this_page:
             oldest_this_page = g_t
 
-      # print(f"[fetch {split}] start={start} page_size={len(results)} "
-      #       f"oldest_page={oldest_this_page} collected={len(collected)}")
+      if oldest_this_page and oldest_this_page < lo_t:
+        break
+
+      start += batch_size
+
+  return collected
+
+async def fetch_matches_since_patch(region: str, puuid: str, lo_patch: str,
+    *, max_batches: int = 180, batch_size: int = 100) -> List[dict]:
+  """
+  Fetch all matches from the given lower-bound patch (inclusive) upward.
+  Stops paging once a page contains matches older than lo_patch.
+  """
+  lo_t = patch_tuple(lo_patch)
+  collected: List[dict] = []
+  start = 0
+
+  async with RiotClient() as rc:
+    for _ in range(max_batches):
+      ids = await rc.match_ids(region, puuid, start=start, count=batch_size)
+      if not ids:
+        break
+
+      results = await asyncio.gather(
+          *[rc.match(region, mid) for mid in ids],
+          return_exceptions=True
+      )
+
+      oldest_this_page = None
+      for m in results:
+        if isinstance(m, Exception):
+          continue
+        info = m.get("info", {})
+        gv = info.get("gameVersion", "")
+        g_t = patch_tuple(gv)
+
+        # Keep everything >= lo_patch; no upper bound.
+        if g_t >= lo_t:
+          collected.append(m)
+
+        if g_t != (0, 0):
+          if not oldest_this_page or g_t < oldest_this_page:
+            oldest_this_page = g_t
 
       if oldest_this_page and oldest_this_page < lo_t:
         break
@@ -450,7 +488,6 @@ def filter_matches_by_bucket(matches: List[dict], bucket: str) -> List[dict]:
     if QUEUE_BUCKET.get(qid) == bucket:
       out.append(m)
   return out
-
 
 def fun_stat_from_matches(matches: List[dict], puuid: str) -> Optional[dict]:
   """Example simple 'oops' stat: highest deaths game."""
