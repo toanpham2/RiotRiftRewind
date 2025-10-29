@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import time
 from typing import Any, Dict, List, Optional
@@ -93,6 +94,45 @@ def _generate_feel_good(player: str, champ: str) -> str:
     return f"{champ} fits you—decisive, confident, and clutch. Keep leaning into what makes your playstyle win."
 
 # ----------------------------
+# Year advice (LLM) – mirrors split advice but year-scoped
+# ----------------------------
+def _claude_year_advice(payload: dict) -> dict:
+  system = (
+    "You are Rift Rewind, a precise League of Legends YEAR analyst.\n"
+    "Input is structured stats for the full year (primary queue subset already chosen).\n"
+    "Return STRICT JSON with keys: summary, insights, focus, fun.\n"
+    "- summary: <= 50 words across 2 sentences; use 'Year' (never 'Season').\n"
+    "- insights: 5–6 concise bullets; be role-aware (support=vision; jungle=KP/objectives; lanes=CS/KDA/damage).\n"
+    "- focus: 5 measurable targets (e.g., 'CS/min ≥ 6.5 over next 20 games', 'Vision ≥ 0.6/min', 'Deaths ≤ 4/game').\n"
+    "- fun: one playful line; prefer payload.funStat details if present.\n"
+    "If gamesAnalyzed < 10, emphasize consistency & sample size."
+  )
+  user = json.dumps(payload, ensure_ascii=False)
+  try:
+    raw = coach_with_claude(system, user, max_tokens=700, temperature=0.4)
+    return json.loads(raw)
+  except Exception:
+    # Safe fallback
+    fun_line = "Queue up and have fun — lock 1–2 champs, stabilize role, and let fundamentals carry."
+    fs = payload.get("funStat", {})
+    if isinstance(fs, dict) and fs.get("text"):
+      fun_line = fs["text"].replace("We’ve all been there.", "At least you committed to the play!")
+    return {
+      "summary": "Small sample or AI unavailable — here’s a quick year plan.",
+      "insights": [
+        "Stabilize champion pool and role for consistent execution.",
+        "Nudge CS/vision to lane-appropriate baselines.",
+        "Trim deaths in mid-game skirmishes."
+      ],
+      "focus": [
+        "Play 20 games in one role",
+        "CS/min ≥ 6.5 (laner) or Vision ≥ 0.9/min (support)",
+        "≤4 deaths/game over next 15 games"
+      ],
+      "fun": fun_line
+    }
+
+# ----------------------------
 # Tiny in-memory TTL cache
 # ----------------------------
 class TTLCache:
@@ -125,11 +165,6 @@ async def _cached_puuid(region: str, name: str, tag: str) -> str:
   return puuid
 
 async def _cached_all_matches(region: str, puuid: str) -> List[dict]:
-  """
-  Fetch ALL matches across the 'year' by going from the earliest split's lower patch upward.
-  Cached to avoid re-calling Riot when computing splits & year.
-  """
-  # Compute the min (earliest) lower-bound patch across your SPLITS
   earliest_lo = min(lo for (lo, _hi) in SPLITS.values())
   key = f"matches_all:{region}:{puuid}:{earliest_lo}"
   hit = CACHE.get(key)
@@ -140,7 +175,7 @@ async def _cached_all_matches(region: str, puuid: str) -> List[dict]:
   return matches
 
 # ----------------------------
-# Auto-routing helpers (don’t trust Riot tag for routing)
+# Auto-routing helpers
 # ----------------------------
 REGION_TO_PLATFORMS = {
   "americas": ["na1", "br1", "la1", "la2", "oc1"],
@@ -150,7 +185,6 @@ REGION_TO_PLATFORMS = {
 }
 
 async def _resolve_region_for_riot_id(game_name: str, tag_line: str) -> Optional[str]:
-  """Try each regional cluster until account/v1 by-riot-id succeeds."""
   for reg in ("americas", "europe", "asia", "sea"):
     try:
       async with RiotClient() as rc:
@@ -161,10 +195,6 @@ async def _resolve_region_for_riot_id(game_name: str, tag_line: str) -> Optional
   return None
 
 async def _derive_platform_from_activity(region: str, puuid: str) -> Optional[str]:
-  """
-  Prefer parsing from match-v5 IDs (e.g., 'NA1_...'). If no matches exist,
-  probe summoner-v4 by-puuid across platforms in that region and return first hit.
-  """
   async with RiotClient() as rc:
     try:
       ids = await rc.match_ids(region, puuid, start=0, count=1)
@@ -172,10 +202,9 @@ async def _derive_platform_from_activity(region: str, puuid: str) -> Optional[st
         mid = ids[0]
         if "_" in mid:
           prefix = mid.split("_", 1)[0].lower()
-          return prefix  # e.g., 'na1'
+          return prefix
     except Exception:
       pass
-
   plats = REGION_TO_PLATFORMS.get(region, [])
   async with RiotClient() as rc:
     for plat in plats:
@@ -192,27 +221,23 @@ async def _cached_current_rank(platform: str, puuid: str) -> dict:
   hit = CACHE.get(key)
   if hit:
     return hit
-
   async with RiotClient() as rc:
     try:
       summ = await rc.summoner_by_puuid(platform, puuid)
       summ_id = (summ or {}).get("id")
     except Exception:
       summ_id = None
-
     rank = {"queue": "UNRANKED", "tier": None, "division": None, "lp": 0, "wins": 0, "losses": 0}
     if summ_id:
       try:
         entries = await rc.ranked_entries(platform, summ_id)
       except Exception:
         entries = []
-
       def pick(q: str):
         for e in entries or []:
           if e.get("queueType") == q:
             return e
         return None
-
       chosen = pick("RANKED_SOLO_5x5") or pick("RANKED_FLEX_SR")
       if chosen:
         rank = {
@@ -223,7 +248,6 @@ async def _cached_current_rank(platform: str, puuid: str) -> dict:
           "wins": chosen.get("wins", 0),
           "losses": chosen.get("losses", 0),
         }
-
   CACHE.put(key, rank, ttl=600)
   return rank
 
@@ -233,7 +257,6 @@ async def _cached_current_rank(platform: str, puuid: str) -> dict:
 def _build_split_block(split_id: str, all_matches: List[dict], puuid: str) -> dict:
   lo, hi = SPLITS[split_id]
   patch_range = f"{lo} - {hi}"
-
   raw_matches = filter_matches_by_split(all_matches, split_id)
   if not raw_matches:
     return {
@@ -247,16 +270,13 @@ def _build_split_block(split_id: str, all_matches: List[dict], puuid: str) -> di
       "topChamps": [],
       "funStat": None,
     }
-
   primary_info = classify_primary_mode(raw_matches)
   dist = primary_info.get("dist", {})
   primary_bucket = primary_info.get("primary") or (max(dist.items(), key=lambda kv: kv[1])[0] if dist else "unranked")
-
   bucket_matches = (
     filter_matches_by_bucket(raw_matches, primary_bucket)
     if primary_bucket and primary_bucket != "unranked" else raw_matches
   )
-
   overall = aggregate_overall_metrics(bucket_matches, puuid)
   best = aggregate_best_champ(bucket_matches, puuid)
   table = aggregate_champ_table(bucket_matches, puuid)
@@ -289,42 +309,39 @@ def _build_split_block(split_id: str, all_matches: List[dict], puuid: str) -> di
 # Year summary endpoint (single fetch → fan out)
 # ----------------------------
 @router.get("/year-summary")
-async def year_summary(region: Optional[str] = None, riotId: str = ""):
+async def year_summary(
+    region: Optional[str] = None,
+    riotId: str = "",
+    includeFeelGood: bool = True,
+    includeAdvice: bool = True,
+):
   """
-  GET /api/year-summary?riotId=MK1Paris%23NA1
-  Optional: ?region=americas|europe|asia|sea (auto-detected if omitted)
-
-  Returns:
-    {
-      "currentRank": { ... }?,   # present only if platform resolved
-      "splits": { "s1": {...}, "s2": {...}, "s3": {...} },
-      "year":   { "primaryQueue", "gamesAnalyzed", "overall", "bestChamp", "topChamps", "standout", "funStat", "feelGood" }
-    }
+  GET /api/year-summary?riotId=MK1Paris%23NA1[&includeFeelGood=true][&includeAdvice=true]
+  Optional region: americas|europe|asia|sea (auto-detected if omitted)
   """
   if "#" not in riotId and "%23" not in riotId:
     raise HTTPException(400, "riotId must be Name#TAG (e.g., MK1Paris#NA1)")
   name, tag = riotId.replace("%23", "#").split("#", 1)
 
-  # 1) Resolve regional cluster (don’t trust tag)
+  # 1) Resolve regional cluster
   reg = (region or "").strip().lower()
   if reg not in ("americas", "europe", "asia", "sea"):
     reg = await _resolve_region_for_riot_id(name, tag)
     if not reg:
       raise HTTPException(404, "Could not resolve regional cluster for this Riot ID.")
 
-  # 2) Resolve PUUID on that region
+  # 2) Resolve PUUID + parallelize platform + matches
   puuid = await _cached_puuid(reg, name, tag)
+  matches_task = asyncio.create_task(_cached_all_matches(reg, puuid))
+  platform_task = asyncio.create_task(_derive_platform_from_activity(reg, puuid))
+  all_matches, platform = await asyncio.gather(matches_task, platform_task)
 
-  # 3) Resolve platform (for summoner/rank) from recent activity or probes
-  platform = await _derive_platform_from_activity(reg, puuid)
+  # 3) Build splits concurrently
+  split_build_tasks = [asyncio.to_thread(_build_split_block, s, all_matches, puuid) for s in SPLITS.keys()]
+  split_block_list = await asyncio.gather(*split_build_tasks)
+  split_blocks = { s: block for s, block in zip(SPLITS.keys(), split_block_list) }
 
-  # ---- SINGLE FETCH: all matches since earliest split's lower patch
-  all_matches: List[dict] = await _cached_all_matches(reg, puuid)
-
-  # ---- Build splits from the single pool
-  split_blocks = { s: _build_split_block(s, all_matches, puuid) for s in SPLITS.keys() }
-
-  # ---- YEAR aggregation on union of all (primary-queue subset inside)
+  # 4) Year aggregation
   if not all_matches:
     resp = {
       "splits": split_blocks,
@@ -336,7 +353,8 @@ async def year_summary(region: Optional[str] = None, riotId: str = ""):
         "topChamps": [],
         "standout": None,
         "funStat": None,
-        "feelGood": "Queue up, focus one role and two champs, and let your fundamentals shine."
+        "feelGood": None,
+        "advice": None,
       }
     }
     if platform:
@@ -362,13 +380,29 @@ async def year_summary(region: Optional[str] = None, riotId: str = ""):
   standout_y = pick_standout_metric_overall(overall_raw)
   fun_y = fun_stat_from_matches(bucket_matches_y, puuid)
 
-  # Feel-good for the YEAR best champ (rank intentionally not included)
-  player_display = f"{name}#{tag}"
-  best_champ_name = (best_y or {}).get("name", "Your Main")
-  feel_good = _generate_feel_good(player_display, best_champ_name)
+  # Optional LLM bits
+  feel_good = None
+  if includeFeelGood:
+    player_display = f"{name}#{tag}"
+    best_champ_name = (best_y or {}).get("name", "Your Main")
+    feel_good = _generate_feel_good(player_display, best_champ_name)
+
+  advice = None
+  if includeAdvice:
+    advice_payload = {
+      "period": "year",
+      "primaryQueue": primary_bucket_y,
+      "gamesAnalyzed": len(bucket_matches_y),
+      "overall": overall_raw,          # raw numbers (LLM can see floats)
+      "bestChamp": best_y,             # raw row
+      "topChamps": table_y[:3],        # raw top3
+      "standout": standout_y,
+      "funStat": fun_y,                # include so LLM can turn it into a punchy 'fun' line
+    }
+    advice = _claude_year_advice(advice_payload)
 
   resp = {
-    "splits": split_blocks,   # ⬅️ frontend can render splits first
+    "splits": split_blocks,
     "year": {
       "primaryQueue": primary_bucket_y,
       "gamesAnalyzed": len(bucket_matches_y),
@@ -376,8 +410,9 @@ async def year_summary(region: Optional[str] = None, riotId: str = ""):
       "bestChamp": best_y_fmt,
       "topChamps": top3_y_fmt,
       "standout": standout_y,
-      "funStat": fun_y,
-      "feelGood": feel_good,
+      "funStat": fun_y,       # numeric/generic record
+      "feelGood": feel_good,  # short hype line
+      "advice": advice,       # summary/insights/focus/fun (punchy)
     }
   }
   if platform:
