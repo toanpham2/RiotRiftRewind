@@ -130,3 +130,23 @@ class RiotClient:
     url = f"https://{plat}.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}"
     data = await self._get(url)
     return data if isinstance(data, list) else []
+
+
+  async def ranked_entries_by_puuid(self, platform: str, puuid: str) -> list[dict]:
+    """
+    League entries using PUUID (preferred; avoids deprecated summoner-id flow).
+    Host MUST be a platform host: na1/euw1/kr/...
+    """
+    plat = (platform or "").lower()
+    if not RIOT_API_KEY:
+      raise RuntimeError("Missing RIOT_API_KEY")
+    url = f"https://{plat}.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}"
+    headers = {"X-Riot-Token": RIOT_API_KEY}
+    timeout = httpx.Timeout(6.0, connect=5.0)
+    async with httpx.AsyncClient(timeout=timeout) as client:
+      r = await client.get(url, headers=headers)
+      if r.status_code == 200:
+        data = r.json()
+        return data if isinstance(data, list) else []
+      # Raise with a short preview (handy for your debugRank flag)
+      raise RuntimeError(f"league/v4 entries by-puuid {plat} {r.status_code}: {(r.text or '')[:200]}")
