@@ -5,7 +5,6 @@ from typing import Optional, Any
 
 from app.config import RIOT_API_KEY, REGIONAL
 
-
 PLATFORM = {
   # Americas cluster
   "NA1": "na1", "BR1": "br1", "LA1": "la1", "LA2": "la2", "OC1": "oc1",
@@ -17,7 +16,6 @@ PLATFORM = {
   "PH2": "ph2", "SG2": "sg2", "TH2": "th2", "TW2": "tw2", "VN2": "vn2",
 }
 
-
 PLATFORM_ALIASES = {
   "NA": "NA1",
   "EUW": "EUW1",
@@ -25,7 +23,6 @@ PLATFORM_ALIASES = {
   "TR": "TR1",
   "JP": "JP1",
 }
-
 
 class RiotClient:
   def __init__(self):
@@ -55,11 +52,9 @@ class RiotClient:
     s = (tag_or_code or "").strip()
     if not s:
       return "na1"
-    # direct code?
     low = s.lower()
     if low in PLATFORM.values():
       return low
-    # tag alias?
     return PLATFORM.get(s.upper(), "na1")
 
   async def _get(self, url: str, params: dict | None = None) -> Any:
@@ -92,7 +87,7 @@ class RiotClient:
     data = await self._get(url)
     return data["puuid"]
 
-  # -------- Match via REGIONAL (supports time/window + queue) --------
+  # -------- Match via REGIONAL --------
   async def match_ids(
       self,
       region: str,
@@ -102,12 +97,10 @@ class RiotClient:
       count: int = 100,
       start_time: int | None = None,
       end_time: int | None = None,
-      queue: int | None = None,        # 420/440/400/430/450/etc.
+      queue: int | None = None,
   ) -> list[str]:
     reg = self._norm_region(region)
-    base = (
-      f"https://{reg}.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids"
-    )
+    base = f"https://{reg}.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids"
     params: dict = {"start": start, "count": count}
     if start_time is not None:
       params["startTime"] = start_time
@@ -122,13 +115,18 @@ class RiotClient:
     url = f"https://{reg}.api.riotgames.com/lol/match/v5/matches/{match_id}"
     return await self._get(url)
 
-  # --- Rank & Summoner endpoints (platform-scoped) ---
+  # --- Summoner & League (platform-scoped) ---
   async def summoner_by_puuid(self, platform: str, puuid: str) -> dict:
     plat = self._norm_platform(platform)
     url = f"https://{plat}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}"
     return await self._get(url)
 
   async def ranked_entries(self, platform: str, summoner_id: str) -> list[dict]:
+    """
+    League-V4: entries for a given encryptedSummonerId on a platform shard.
+    https://{platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/{encryptedSummonerId}
+    """
     plat = self._norm_platform(platform)
     url = f"https://{plat}.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}"
-    return await self._get(url)
+    data = await self._get(url)
+    return data if isinstance(data, list) else []
