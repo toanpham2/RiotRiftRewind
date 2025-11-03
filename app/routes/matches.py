@@ -50,6 +50,13 @@ async def get_matches(region: str, riotId: str, mode: str = "all", start: int = 
     for mid in ids:
       m = await rc.match(region, mid)
       info = m.get("info", {})
+      gv = info.get("gameVersion", "")
+      patch = ""
+      try:
+        major, minor, *_ = gv.split(".")
+        patch = f"{int(major)}.{int(minor)}"
+      except Exception:
+        patch = ""
       you = next((p for p in info.get("participants", []) if p.get("puuid") == puuid), None)
 
       youb = YouBrief(
@@ -65,6 +72,7 @@ async def get_matches(region: str, riotId: str, mode: str = "all", start: int = 
           queueId=info.get("queueId", -1),
           gameMode=info.get("gameMode", ""),
           durationSec=info.get("gameDuration", you.get("timePlayed", 0) if you else 0),
+          patch=patch,                    # <-- include
           you=youb
       ))
 
