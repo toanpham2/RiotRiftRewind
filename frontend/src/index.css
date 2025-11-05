@@ -1,4 +1,4 @@
-/* 1) External imports must be at the very top for PostCSS/Vite */
+
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;600;700&display=swap');
 
 /* 2) Tailwind layers */
@@ -6,7 +6,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 3) Base styles (no @apply) */
 :root { color-scheme: dark; }
 
 html, body, #root {
@@ -24,16 +23,15 @@ body {
   background-attachment: fixed;
 }
 
-/* Global heading tweaks without @apply */
 h1, h2, h3 {
   letter-spacing: .02em;
-  font-family: "Cinzel", serif;  /* matches your Tailwind font-display */
+  font-family: "Cinzel", serif;
 }
 h1 { font-weight: 800; }
 h2 { font-weight: 700; }
 h3 { font-weight: 600; }
 
-/* 4) Vignette overlay (use with `absolute inset-0 lol-vignette` in JSX) */
+
 .lol-vignette {
   pointer-events: none;
   background:

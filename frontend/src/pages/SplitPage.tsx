@@ -1,11 +1,14 @@
+// src/pages/SplitPage.tsx
 import type { SplitBlock } from "../types/year";
 import SplitHeader from "../components/SplitHeader";
 import { Stat } from "../components/Stat";
 import BestChampCard from "../components/BestChampCard";
 import GoldCard from "../components/GoldCard";
+import { useDdragonVersion, champIconURL } from "../lib/ddragon";
 
 export default function SplitPage({ split }: { split: SplitBlock }) {
   const { splitId, patchRange, overall, bestChamp, topChamps } = split;
+  const version = useDdragonVersion();
 
   return (
       <div className="min-h-screen relative overflow-hidden bg-lolBg">
@@ -41,14 +44,14 @@ export default function SplitPage({ split }: { split: SplitBlock }) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="rounded-lg bg-[#10161c] border border-white/10 p-4">
                             <Stat label="Games analyzed" value={overall.games} />
-                            <Stat label="Primary queue" value={split.primaryQueue} />
-                            <Stat label="Primary role" value={overall.primaryRole} />
-                            <Stat label="Winrate" value={overall.winrate} />
+                            <Stat label="Primary queue" value={(split as any).primaryQueue ?? "—"} />
+                            <Stat label="Primary role" value={overall.primaryRole ?? "—"} />
+                            <Stat label="Winrate" value={overall.winrate ?? "—"} />
                           </div>
                           <div className="rounded-lg bg-[#10161c] border border-white/10 p-4">
-                            <Stat label="KDA" value={overall.kda.toFixed(2)} />
-                            <Stat label="CS / min" value={overall.csPerMin.toFixed(2)} />
-                            <Stat label="Vision / min" value={overall.visionPerMin.toFixed(2)} />
+                            <Stat label="KDA" value={overall.kda?.toFixed?.(2) ?? overall.kda ?? "—"} />
+                            <Stat label="CS / min" value={overall.csPerMin?.toFixed?.(2) ?? overall.csPerMin ?? "—"} />
+                            <Stat label="Vision / min" value={overall.visionPerMin?.toFixed?.(2) ?? overall.visionPerMin ?? "—"} />
                           </div>
                         </div>
                     )}
@@ -80,8 +83,13 @@ export default function SplitPage({ split }: { split: SplitBlock }) {
                                 key={`${c.name}-${c.games}`}
                                 className="grid grid-cols-3 gap-2 items-center rounded bg-white/5 border border-white/10 p-2"
                             >
-                              {/* placeholder champ icon */}
-                              <div className="h-8 w-8 rounded bg-white/10 border border-white/15" />
+                              {/* real champ icon */}
+                              <img
+                                  src={champIconURL(c.name, version)}
+                                  alt={c.name}
+                                  className="h-8 w-8 rounded border border-white/15 object-cover"
+                                  onError={(e) => (e.currentTarget.style.visibility = "hidden")}
+                              />
                               <div>
                                 <div className="text-gray-100 font-medium leading-tight">{c.name}</div>
                                 <div className="text-xs text-gray-400 leading-tight">{c.role}</div>

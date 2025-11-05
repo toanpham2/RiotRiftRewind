@@ -13,8 +13,6 @@ export default function LoginPage({ onSuccess }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // dev-only: show the returned JSON under the form
-  const [result, setResult] = useState<YearSummary | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,8 +27,7 @@ export default function LoginPage({ onSuccess }: Props) {
           cleanedTag
       )) as YearSummary;
 
-      setResult(data);  // keep for verification while developing
-      onSuccess(data);  // lift to <App/> to render SplitsRouter
+      onSuccess(data);
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch summary");
     } finally {
@@ -124,15 +121,6 @@ export default function LoginPage({ onSuccess }: Props) {
                   </div>
               )}
 
-              {/* Dev-only: show returned JSON to confirm */}
-              {result && (
-                  <div className="mt-4">
-                    <h2 className="text-lolGold font-semibold mb-2">Result JSON</h2>
-                    <pre className="text-xs bg-[#0f1419] text-gray-200 p-3 rounded-lg overflow-auto max-h-[45vh]">
-                  {JSON.stringify(result, null, 2)}
-                </pre>
-                  </div>
-              )}
             </form>
           </section>
         </main>

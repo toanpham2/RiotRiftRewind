@@ -1,4 +1,3 @@
-// src/pages/SplitsRouter.tsx
 import type { YearSummary } from "../types/year";
 import SplitEmpty from "./SplitEmpty";
 import SplitPage from "./SplitPage";
@@ -8,7 +7,7 @@ import YearRecap from "./YearRecap";
 
 export default function SplitsRouter({ data }: { data: YearSummary }) {
   const { s1, s2, s3 } = data.splits;
-  const { year } = data; // 👈 new field from your fixed type
+  const { year } = data;
 
   return (
       <div className="space-y-16">

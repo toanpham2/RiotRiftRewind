@@ -451,21 +451,18 @@ async def _cached_current_rank(
   # --- 3) Fetch league entries (client first, then direct)
   entries = []
   client_rank_err = None
-
   async with RiotClient() as rc:
     try:
-      entries = await rc.ranked_entries_by_puuid(plat, puuid)
+      entries = await rc.ranked_entries(plat, summ_id)
     except Exception as e:
       client_rank_err = str(e)[:200]
-      entries = []
 
-  # direct fallback (also by PUUID), in case your client class hit a transient error
   http_status = None
   http_preview = None
   if not entries:
     try:
-      import httpx, os
-      url = f"https://{plat}.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}"
+      import os, httpx
+      url = f"https://{plat}.api.riotgames.com/lol/league/v4/entries/by-summoner/{summ_id}"
       headers = {"X-Riot-Token": os.getenv("RIOT_API_KEY")}
       timeout = httpx.Timeout(7.0, connect=5.0)
       async with httpx.AsyncClient(timeout=timeout) as c:

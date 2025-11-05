@@ -1,6 +1,8 @@
 import type { BestChamp } from "../types/year";
+import {champIconURL, useDdragonVersion} from "../lib/ddragon.ts";
 
 /* ---------- local helpers ---------- */
+
 
 function pctToNumber(s: string | number | undefined | null) {
   if (s == null) return 0;
@@ -18,7 +20,6 @@ function fmtNum(n: unknown, digits = 2) {
   return Number.isFinite(v) ? v.toFixed(digits) : "—";
 }
 
-/* ---------- tiny UI atoms (inline to avoid extra imports) ---------- */
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
@@ -43,6 +44,7 @@ function MiniBar({ pct }: { pct: number }) {
 /* ---------- card ---------- */
 
 export default function BestChampCard({ champ }: { champ: BestChamp }) {
+  const version = useDdragonVersion();
   const winPct = pctToNumber(champ?.winrate);
   const kpPct  = pctToNumber(champ?.kp);
   const dmgPct = pctToNumber(champ?.dmgShare);
@@ -54,10 +56,16 @@ export default function BestChampCard({ champ }: { champ: BestChamp }) {
           <div>
             <div className="text-sm text-gray-300">Best Champ</div>
             <div className="text-lg font-semibold text-lolGold">{champ?.name ?? "—"}</div>
-            <div className="text-xs text-gray-400 uppercase tracking-wide">{champ?.role ?? "—"}</div>
+            <div
+                className="text-xs text-gray-400 uppercase tracking-wide">{champ?.role ?? "—"}</div>
           </div>
           {/* Placeholder for champion icon */}
-          <div className="h-12 w-12 rounded-lg bg-white/10 border border-white/15" />
+
+          <img
+              src={champIconURL(champ.name, version)}
+              alt={champ.name}
+              className="h-36 w-36 rounded-2xl border-2 border-lolGold shadow-[0_0_22px_rgba(201,168,106,0.3)] object-cover"
+          />
         </div>
 
         {/* Stat lines with chips + mini bars */}
