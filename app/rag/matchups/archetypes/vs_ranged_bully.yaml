@@ -1,0 +1,17 @@
+archetype: "ranged bully"
+strengths:
+  - Lane control, poke, zoning
+weaknesses:
+  - Squishy and gank vulnerable
+early_game:
+  - Thin the wave while sustaining and perserving hp if possible, sometimes they over extend and you can take trades vs them that way
+mid_game:
+  - Force objectives where they can’t free poke
+late_game:
+  - Engage tools beat them; they struggle in scrappy fights
+win_conditions:
+  - Survive lane; reach mid-game items
+lose_conditions:
+  - Letting them crash waves uncontested
+tips_for_this_player:
+  - Buy early MR/armor/health, don't be afraid to play aggressive when a ranged bully like Teemo or Quinn overstep

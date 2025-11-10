@@ -1,11 +1,77 @@
-import { useState } from "react";
+// src/pages/LoginPage.tsx
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { YearSummary } from "../types/year";
 import { fetchYearSummaryByRiotId } from "../api/client";
-import { Skeleton } from "../components/Skeleton";
 
 type Props = {
   onSuccess: (data: YearSummary) => void;
 };
+
+const LOADING_QUOTES = [
+  "Warding 1:10 raptors…",
+  "Sweeping shrooms…",
+  "Sweeping wards…",
+  "Checking tri-brush…",
+  "Sneaking Baron…",
+  "Throwing at Atakhan…",
+  "Landing hooks…",
+  "Baiting parries…",
+  "Baby sitting Draven…",
+  "Killing Mundo (not possible)…",
+  "Dodging Naut hooks…",
+  "Purchasing Serpent’s fang…",
+  "Purchasing anti-heal…",
+  "Protecting towers from Yorick…",
+  "Shurima shuffling 5 people…",
+  "Taking Lee Sin Qs…",
+  "Insecting …",
+  "Brush hopping with Rengar…",
+  "Running Away from level 6 Renekton…",
+  "Watching T1 win worlds for the 78th time…",
+  "Nerfing Irelia…",
+  "Reworking Ryze…",
+  "Blind picking Renekton…",
+  "Stacking with Nasus…",
+  "Dunking with Darius…",
+  "1 v 9 ing (or attempting to) with Vayne…",
+  "Animation canceling with Riven …",
+  "Ambulance-ing with Soraka…",
+  "That tasted purple…",
+  "Landing cross Map arrows…",
+  "Dearest Karthus…",
+  "Landing Pantheon ults…",
+  "Killing Mundo (still at it)…",
+  "Looking for Mama with Yuumi…",
+  "Hasagi-ing with Yasuo…",
+  "Building Ornaments…",
+  "Printing money with Pyke…",
+  "Eating Grubs with Nunu …",
+  "Ghosting and Cleansing with Nunu…",
+  "10cs per minute-ing with Ryze…",
+  "Scaling with Kayle…",
+  "Scaling with Kass…",
+  "Gliding with Twitch …",
+  "Healing with Aatrox…",
+  "5 point-ing…",
+  "Stacking for invade…",
+  "Level 1 invading…",
+  "Late invading…",
+  "Buying glowing motes…",
+  "Smitting Baron..",
+  "Missing smite on Baron…",
+  "Smitting Elder…",
+  "Missing smite on Elder..",
+  "Dashing into Viktor…",
+  "Getting swept by Aatrox…",
+  "Outplaying with Lucian…",
+  "Checking in on Bjergsen…",
+  "Getting Rank1 KR with Natty Natt…",
+  "You really think I needed all the guards at the hexgates…",
+  "Polymorphing…",
+  "Grasp proccing…",
+  "Arena Augments gambling…",
+  "Please make Aram Mahem permanent…",
+];
 
 export default function LoginPage({ onSuccess }: Props) {
   const [name, setName] = useState("");
@@ -13,25 +79,62 @@ export default function LoginPage({ onSuccess }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // progress + rotating quote
+  const [progress, setProgress] = useState(0);
+  const [quote, setQuote] = useState<string>("");
+  const tickRef = useRef<number | null>(null);
+  const quoteRef = useRef<number | null>(null);
+
+  // choose an initial random quote whenever we enter loading
+  const randomQuote = useMemo(
+      () => () => LOADING_QUOTES[Math.floor(Math.random() * LOADING_QUOTES.length)],
+      []
+  );
+
+  // progress/quote loop
+  useEffect(() => {
+    if (loading) {
+      setProgress(0);
+      setQuote(randomQuote());
+
+      // progress: accelerate quickly then slow near 90%
+      tickRef.current = window.setInterval(() => {
+        setProgress((p) => {
+          const next = p < 70 ? p + 3 + Math.random() * 3 : p < 90 ? p + 0.8 + Math.random() * 0.8 : p;
+          return Math.min(next, 90);
+        });
+      }, 200);
+
+      // quote swap every 3s
+      quoteRef.current = window.setInterval(() => {
+        setQuote(randomQuote());
+      }, 3000);
+    }
+    return () => {
+      if (tickRef.current) window.clearInterval(tickRef.current);
+      if (quoteRef.current) window.clearInterval(quoteRef.current);
+      tickRef.current = null;
+      quoteRef.current = null;
+    };
+  }, [loading, randomQuote]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      // Ensure exactly one leading '#'
       const cleanedTag = `#${tag.replace(/^#*/, "")}`;
+      const data = (await fetchYearSummaryByRiotId(name.trim(), cleanedTag)) as YearSummary;
 
-      const data = (await fetchYearSummaryByRiotId(
-          name.trim(),
-          cleanedTag
-      )) as YearSummary;
-
+      // finish bar
+      setProgress(100);
       onSuccess(data);
     } catch (err: any) {
+      setProgress(100);
       setError(err?.message ?? "Failed to fetch summary");
     } finally {
-      setLoading(false);
+      // give the bar a split-second to reach 100 for a nicer feel
+      setTimeout(() => setLoading(false), 250);
     }
   }
 
@@ -43,10 +146,7 @@ export default function LoginPage({ onSuccess }: Props) {
             style={{ backgroundImage: `url('/lol-bg.jpg')` }}
             aria-hidden
         />
-        <div
-            className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"
-            aria-hidden
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" aria-hidden />
         <div className="absolute inset-0 lol-vignette" aria-hidden />
 
         {/* Centered panel */}
@@ -112,15 +212,24 @@ export default function LoginPage({ onSuccess }: Props) {
               </span>
               </div>
 
-              {/* Skeletons while we wait (LoL client vibe) */}
+              {/* Loading progress bar + quote */}
               {loading && (
-                  <div className="mt-2 space-y-3">
-                    <Skeleton className="h-6 w-3/4" />
-                    <Skeleton className="h-6 w-2/3" />
-                    <Skeleton className="h-6 w-5/6" />
+                  <div className="mt-6 space-y-3">
+                    {/* gold trim container */}
+                    <div className="rounded-xl border-2 border-lolGold bg-black/30 p-1 shadow-[0_0_14px_rgba(201,168,106,0.25)]">
+                      <div
+                          className="h-3 rounded-lg bg-[#2237a7] transition-[width] duration-200"
+                          style={{ width: `${Math.max(1, Math.min(100, Math.round(progress)))}%` }}
+                      />
+                    </div>
+                    <div className="text-center text-sm text-gray-300">
+                      <span className="font-semibold text-gray-100">{Math.round(progress)}%</span>
+                    </div>
+
+                    {/* flickering quote */}
+                    <p className="text-center text-gray-300 animate-pulse select-none">{quote}</p>
                   </div>
               )}
-
             </form>
           </section>
         </main>

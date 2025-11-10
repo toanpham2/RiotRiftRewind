@@ -1,0 +1,19 @@
+archetype: "bruiser"
+strengths:
+  - Strong skirmishing and sustain
+  - Powerful early spikes
+weaknesses:
+  - Cooldown-dependent
+  - Item reliant
+early_game:
+  - Short trades only; disengage early
+mid_game:
+  - Avoid isolated 1v1s without help
+late_game:
+  - Peel your carries; punish split pushes
+win_conditions:
+  - Force them to use key abilities defensively, like Renekton having to use his ult defensively instead of using it to dominate a fight
+lose_conditions:
+  - Fighting in their cooldown rotation
+tips_for_this_player:
+  - Time fights around their key cooldowns

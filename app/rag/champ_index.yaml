@@ -1,0 +1,245 @@
+Ornn:
+  - tank
+  - teamfight
+
+Sion:
+  - tank
+  - splitpusher
+  - teamfight
+
+Shen:
+  - tank
+  - engage
+  - teamfight
+
+Maokai:
+  - tank
+  - engage
+  - teamfight
+
+Malphite:
+  - tank
+  - engage
+  - teamfight
+
+Cho'Gath:
+  - tank
+  - sustain
+  - scaler
+
+Dr. Mundo:
+  - tank
+  - sustain
+  - scaler
+
+Tahm Kench:
+  - tank
+  - sustain
+
+Zac:
+  - tank
+  - engage
+  - teamfight
+
+Rammus:
+  - tank
+  - engage
+Aatrox:
+  - juggernaut
+  - sustain
+  - snowballer
+
+Darius:
+  - juggernaut
+  - snowballer
+  - sustain
+
+Garen:
+  - juggernaut
+  - sustain
+
+Mordekaiser:
+  - juggernaut
+  - scaler
+  - sustain
+
+Sett:
+  - juggernaut
+  - bruiser
+  - snowballer
+
+Illaoi:
+  - juggernaut
+  - splitpusher
+  - sustain
+
+Trundle:
+  - juggernaut
+  - splitpusher
+  - sustain
+
+Volibear:
+  - juggernaut
+  - bruiser
+  - engage
+
+Udyr:
+  - juggernaut
+  - sustain
+Renekton:
+  - bruiser
+  - snowballer
+  - engage
+
+Jax:
+  - bruiser
+  - splitpusher
+  - scaler
+
+Ambessa:
+  - bruiser
+  - engage
+  - snowballer
+
+Wukong:
+  - bruiser
+  - engage
+  - teamfight
+
+Olaf:
+  - bruiser
+  - snowballer
+  - sustain
+
+Vi (Top):
+  - bruiser
+  - engage
+  - snowballer
+
+Skarner (S15):
+  - bruiser
+  - engage
+  - tank
+Fiora:
+  - splitpusher
+  - snowballer
+
+Tryndamere:
+  - splitpusher
+  - snowballer
+  - sustain
+
+Yorick:
+  - splitpusher
+
+Camille:
+  - bruiser
+  - engage
+  - splitpusher
+
+Kled:
+  - engage
+  - bruiser
+  - snowballer
+
+Pantheon:
+  - engage
+  - snowballer
+
+Gnar:
+  - engage
+  - poke
+  - teamfight
+
+Riven:
+  - bruiser
+  - snowballer
+
+Yasuo:
+  - snowballer
+  - bruiser
+
+Yone:
+  - snowballer
+  - bruiser
+
+Gwen:
+  - bruiser
+  - sustain
+  - scaler
+
+Briar (Top):
+  - snowballer
+  - bruiser
+Teemo:
+  - poke
+  - ranged_bully
+  - splitpusher
+
+Kennen:
+  - poke
+  - teamfight
+
+Jayce:
+  - poke
+  - ranged_bully
+
+Quinn:
+  - ranged_bully
+  - snowballer
+
+Vayne (Top):
+  - ranged_bully
+  - snowballer
+  - scaler
+
+Heimerdinger:
+  - poke
+  - ranged_bully
+
+Ziggs (Top):
+  - poke
+Nasus:
+  - scaler
+  - splitpusher
+  - sustain
+
+Kayle:
+  - scaler
+  - ranged_bully
+
+Kassadin (Top):
+  - scaler
+
+Vladimir:
+  - scaler
+  - sustain
+
+Ryze:
+  - scaler
+Akali:
+  - assassin
+  - snowballer
+
+Qiyana (Top):
+  - assassin
+  - snowballer
+
+Rengar (Top):
+  - assassin
+  - snowballer
+
+Nocturne (Top):
+  - assassin
+  - splitpusher
+Swain:
+  - sustain
+  - teamfight
+
+Lillia:
+  - sustain
+  - bruiser
+
+Sylas:
+  - sustain
+  - snowballer

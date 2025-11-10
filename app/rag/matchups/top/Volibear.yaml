@@ -1,0 +1,286 @@
+champion: Volibear
+role: Top
+archetype: juggernaut
+
+identity_summary: >
+  Volibear is an early–mid game juggernaut specializing in level 3–6 all-ins,
+  skirmish dominance, and tower diving. He pressures through Q threat, E zone,
+  and W sustain, converting leads into guaranteed dives with R (turret disable).
+
+core_strengths:
+  - "One of the strongest level 3–6 all-ins top"
+  - "Reliable engage + follow-up CC for ganks"
+  - "W sustain + passive AS makes extended fights favorable"
+  - "R disables towers for near-guaranteed dives"
+  - "Flexible builds: AP bruiser, AD bruiser, or tank"
+
+core_weaknesses:
+  - "Kitable by high-mobility/ranged comps"
+  - "Predictable engage pathing"
+  - "Needs tempo; falls off if behind"
+
+optimal_runes:
+  primary: "Precision"
+  keystone: ["Lethal Tempo"]
+  primary_runes:
+    - Triumph
+    - Legend: Alacrity
+    - Last Stand
+  secondary_tree: "Resolve"
+  secondary_choices:
+    - Demolish
+    - Revitalize
+  shards:
+    - Attack Speed
+    - Adaptive Force
+    - Armor or MR
+
+alt_runes:
+  keystone: "Grasp of the Undying"
+  notes: "Use vs short-trade lanes; pair with Demolish + Second Wind + Revitalize and (Inspiration) Biscuit/Insight."
+
+summoners:
+  default: ["Flash", "Teleport"]
+  kill_lane: ["Flash", "Ignite"]
+
+core_items:
+  core:
+    preferred:
+      - "Trinity Force"
+    alt:
+      - "Riftmaker"
+      - "Rod of Ages"
+      - "Black Cleaver"
+      - "Sundered Sky"
+      - "Iceborn Gauntlet"
+      - "Jak'Sho, The Protean"
+    notes: >
+      AD bruiser: Trinity → Cleaver/Sundered; AP bruiser: RoA/Riftmaker → Cosmic;
+      Tank: Iceborn/Jak'Sho → Unending Despair. Choose by enemy damage profile.
+  boots:
+    - Plated Steelcaps
+    - Mercury Treads
+    - Ionian Boots of Lucidity
+  core_legendaries:
+    - Sterak’s Gage
+    - Death’s Dance
+    - Spirit Visage
+    - Unending Despair
+    - Randuin's Omen
+    - Heartsteel
+    - Cosmic Drive
+    - Navori Flickerblade
+
+situational_items:
+  vs_AD:
+    - "Plated Steelcaps"
+    - "Iceborn Gauntlet"
+    - "Randuin's Omen"
+    - "Death’s Dance"
+  vs_AP:
+    - "Mercury Treads"
+    - "Spirit Visage"
+    - "Kaenic Rookern"
+  anti_heal:
+    - "Bramble Vest"
+    - "Executioner's Calling"
+    - "Oblivion Orb"
+
+trading_pattern:
+  fundamentals: >
+    Win through threat pressure and clean ability sequencing. Default short trade:
+    Q to force space → E zone lands → W mark → hold W2 for finisher/sustain. Only
+    commit long when W2 is reachable or enemy has no escape.
+  key_patterns:
+    - "Q → (force path) → E under target → W (mark) → autos → W2 to finish"
+    - "Q fake to draw cooldowns, re-engage when W up"
+    - "Hold W2; it swings fights"
+  vs_melee:
+    - "Trade often pre-spike; punish CDs with Q"
+    - "If E or W2 lands, extend"
+  vs_range:
+    - "Use brush to hide Q; only commit on misposition"
+    - "If spaced/kited, farm safely and thin with E"
+
+wave_management:
+  level_1: "Push early with passive + E to hit level 2 first"
+  lvl3: "Set up crash for dive; threaten Q → E → W with jungler"
+  mid_game: "Stack waves, crash, and dive with R"
+  late_game: "Front-to-back; flank if backline is immobile"
+
+jungle_coordination:
+  when_you_call_gank:
+    - "Ping early; angle Q so flash trade is guaranteed"
+    - "Stack wave before dive; drop R to disable tower"
+  when_enemy_ganks:
+    - "Respect CC chains; you can 1v2 if ahead with W2 + E shield"
+    - "Ward early — you naturally push"
+
+timing_spikes:
+  lvl2: "Q threat online"
+  lvl3: "All-in pattern unlocked"
+  lvl6: "Dive windows open with tower disable"
+  1_item: "Major spike (Trinity/Riftmaker/Iceborn)"
+  2_items: "Skirmish monster"
+
+---
+
+matchups:
+
+  Renekton:
+    difficulty: "Hard"
+    threats:
+      - "Fury windows (empowered W/Q) outtrades your short pattern"
+      - "E mobility spaces your Q"
+      - "Can out-sustain your mana with Q"
+    you_win_if: "You avoid his empowered windows and trade when W2 is reachable."
+    trading:
+      - "Don’t Q straight into his E range; angle/brush it"
+      - "Fight after empowered W is down"
+      - "Level 1 prio possible with Lethal + Ignite; punish low HP with Q flash"
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force or Iceborn Gauntlet"
+      - "Unending Despair"
+      - "Black Cleaver"
+    wave: "Slow push → crash → set up dive with jungler"
+
+  Pantheon:
+    difficulty: "Hard"
+    threats:
+      - "Point-and-click stun + heavy early burst"
+      - "Long-range Q poke"
+      - "E can blank your Q/E damage"
+    you_win_if: "You drag trades and force W2 heals; punish wasted E."
+    trading:
+      - "Avoid fighting pre-3; post-3 fish for E hit then Q"
+      - "If he E’s your damage, walk behind for W"
+      - "All-in if he blows W or E poorly"
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force or Iceborn"
+      - "Unending Despair"
+      - "Spirit Visage (AP heavy)"
+    wave: "Keep near tower; punish his roams with push/plates"
+
+  Aatrox:
+    difficulty: "Even/Skill"
+    threats:
+      - "Q1/2/3 spacing"
+    you_win_if: "You dodge Q1 and extend with W sustain/W2."
+    trading:
+      - "If Q1 misses, Q in to force E → land E zone → W mark → extend"
+      - "Buy anti-heal when needed"
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force"
+      - "Black Cleaver"
+      - "Unending Despair"
+      - "Bramble/Executioner's/Orb (as needed)"
+    wave: "Push early then freeze after first reset"
+
+  Mordekaiser:
+    difficulty: "Hard"
+    threats:
+      - "Extended duels + isolation ult"
+      - "Shield makes short trades inefficient"
+    you_win_if: "You chunk before he stacks passive; kite Q; save W2 for swing."
+    trading:
+      - "Short trade only; Q fake to bait E, re-engage on cooldowns"
+    items:
+      - "Mercury Treads"
+      - "Riftmaker or Trinity (game-dependent)"
+      - "Spirit Visage"
+      - "Unending Despair"
+    wave: "Don’t let him freeze; thin and keep wave mid-lane"
+
+  Ornn:
+    difficulty: "Medium"
+    threats:
+      - "Brittle punish + predictable disengage"
+    you_win_if: "You force commits in melee or convert stacked waves to plates/dives."
+    trading:
+      - "Q from closer angle so E can’t escape before it lands"
+      - "If he never walks up, he must spend mana to farm—take plates"
+    items:
+      - "Mercury Treads"
+      - "Trinity Force or Riftmaker"
+      - "Spirit Visage"
+      - "Unending Despair"
+    wave: "Stack → crash; deny exp or take plates; proxy if safe"
+
+  Teemo:
+    difficulty: "Hard"
+    threats:
+      - "Blind shuts down Q/W autos"
+      - "Ranged poke + kiting"
+    you_win_if: "You don’t waste combo into blind and you out-sustain poke."
+    trading:
+      - "If he blinds early, run past briefly, then W/Q after blind ends"
+      - "Use brush angles; E for shove to limit poke windows"
+    items:
+      - "Mercury Treads"
+      - "Riftmaker or Spirit Visage"
+      - "Unending Despair"
+    wave: "Let him push; freeze for ganks or proxy clear if safe"
+
+  Sion:
+    difficulty: "Easy"
+    threats:
+      - "Q-W-E zoning; infinite HP scaling"
+    you_win_if: "You interrupt Q or take extended trades with W sustain."
+    trading:
+      - "All-in in melee; avoid getting tagged by E slow"
+      - "If he channels Q, Q straight at him to force cancel or walk out"
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force or Iceborn"
+      - "Unending Despair"
+    wave: "Stack → crash → plates; proxy possible with R up"
+
+  Jax:
+    difficulty: "Hard"
+    threats:
+      - "E negates Q/W autos; strong level 6"
+    you_win_if: "You trade when E is down or convert E hit to quick W2."
+    trading:
+      - "Time W/Q at the tail end of his E; empowered autos are unstoppable"
+      - "All-in only if E down"
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force"
+      - "Iceborn Gauntlet"
+      - "Unending Despair"
+    wave: "Let him push; freeze for ganks or fast-clear to avoid long lanes"
+
+  Shen:
+    difficulty: "Medium-Easy"
+    threats:
+      - "Taunt + Spirit’s Refuge short trades"
+    you_win_if: "You win all-ins post-3; time W/Q around his W/Q pull."
+    trading:
+      - "Q stun + W when his W is down or sword isn’t on him"
+    items:
+      - "Mercury Treads"
+      - "Trinity Force or Riftmaker"
+      - "Spirit Visage"
+      - "Unending Despair"
+    wave: "Push him in; roam when he ults"
+
+---
+
+macro_advice:
+  early_game: >
+    Push for level 2, take aggressive trades, and look for level 3 all-ins.
+    Stack waves to force dives with R. Track junglers—your lane naturally pushes.
+  mid_game: >
+    Play for side pressure and repeated skirmishes. Crash-dive cycles with
+    jungler win games.
+  late_game: >
+    Front-to-back or flank based on enemy backline mobility. Peel when kited comps
+    deny your backline access.
+
+common_mistakes:
+  - "Q from too far → kited and CC’d"
+  - "Diving without tracking CDs/TPs"
+  - "Ulting too late to save dives or start fights"

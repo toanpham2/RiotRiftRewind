@@ -1,0 +1,137 @@
+champion: Pantheon
+role: Top
+# Keep this simple so your archetype lookup doesn't get confused.
+archetype: engage
+
+summary: >
+  Pantheon is an early-game lane dominator who wins through short, guaranteed
+  burst windows (Empowered W + Q) and early roam timings with R. Play for level
+  2/3 spikes, keep trades short, and use E to nullify key retaliations.
+
+laning_plan:
+  - Stack passive with Q poke; all-in when at 3–4 stacks.
+  - Take only short trades unless you’re clearly winning.
+  - Crash early, then look mid/bot with R when the wave bounces.
+  - Hold E for their biggest return damage or gank; don’t waste it for DPS.
+  - Manage tempo: shove on advantage, freeze after a bad trade.
+
+trading:
+  - 3–4 stacks → W → AA → Q(Emp) → disengage; E if they try to re-engage.
+  - Q at max range to stack passive safely and chip.
+  - If they gapclose with a key CD, W to interrupt pattern and back off.
+  - Use Empowered W → 3x AA when you must commit longer (e.g., with jungler).
+  - Be conservative with E; saving it wins fights more than its damage.
+
+runes:
+  - Precision: Press the Attack, Triumph, Legend Haste, Last Stand/Coup de Grace
+  - Secondary (Resolve): Bone Plating vs all-in / Second Wind vs poke / Overgrowth to scale / Unflinching vs heavy CC
+  - Secondary (Sorcery): Manaflow Band, Scorch for aggressive lanes
+  - Secondary (Inspiration): Biscuit Delivery, Cosmic Insight (or Jack of All Trades if allowed)
+  - Shards: Adaptive Force, Adaptive Force, Flat Health
+
+items:
+  - Start: Long Sword + Refillable or Doran’s Blade vs squishies
+  - Core: Eclipse, Sundered Sky
+  - Alts: Black Cleaver, Spear of Shojin, Stridebreaker, Blade of the Ruined King
+  - Boots: Plated Steelcaps / Mercury Treads / Ionian Boots of Lucidity
+  - Defensives: Sterak’s Gage, Death’s Dance, Maw of Malmortius, Guardian Angel
+
+checklist:
+  - Track level-2 window; set up wave to hit it first.
+  - Ward timers: ~2:45 and ~5:00; ping jungler 20s before set-ups.
+  - Keep passive stacked before trading or calling gank.
+  - After shove, scan mid/bot for R angles before recalling.
+
+skill_tips:
+  - Cast E backward to fully negate linear retaliation.
+  - Buffer W to cancel some dashes/casts; don’t W into obvious parries.
+  - Hide vitals/skillshots with minion waves/terrain when possible.
+  - You can ult back to lane to punish plate takes—spear hit often forces Flash.
+
+power_spikes:
+  - "Lvl2: strongest early all-in; plan for it."
+  - "Lvl3: full combo online—kill pressure with Ignite."
+  - "Lvl6: roam threat—shove then R to fights/objectives."
+  - "2 items (Eclipse + Sundered): one-shot windows vs carries."
+  - "Lvl16: underrated late spike; plays front-to-back or pick."
+
+matchups:
+  Ornn:
+    difficulty: "Medium"
+    threats:
+      - "CC chain and brittle procs"
+      - "Tankiness + item upgrades"
+    you_win_if: "You chip with Q, deny Q→W→E chains, and don’t get brittle proc’d in melee."
+    trading:
+      - "W his W2 late to deny brittle AA; E if needed."
+      - "Q poke; don’t overstay in melee range."
+    items:
+      - "Mercury Treads"
+      - "Eclipse"
+      - "Black Cleaver"
+      - "Sundered Sky"
+      - "Spear of Shojin"
+    wave: "Shove/roam or freeze to punish last-hits."
+
+  Aatrox:
+    difficulty: "Even-Skill"
+    threats:
+      - "Extended fights + healing"
+      - "Q2/Q3 spacing punishes linear engages"
+    you_win_if: "You keep trades short and E/Q through Q sweet spots."
+    trading:
+      - "W his Q1, stand inside Q2, E his Q3."
+      - "Never take extended fights without big lead."
+    items:
+      - "Plated Steelcaps"
+      - "Eclipse"
+      - "Sundered Sky"
+      - "Black Cleaver"
+      - "Spear of Shojin"
+    wave: "Freeze after first crash; punish last-hit animations."
+
+  Camille:
+    difficulty: "Even"
+    threats:
+      - "Mobility + true damage Q2"
+    you_win_if: "You chunk early and play short trades around her E/W."
+    trading:
+      - "Hold W to interrupt her pattern; Q poke constantly."
+      - "E her Q2 or disengage with E after your combo."
+    items:
+      - "Plated Steelcaps"
+      - "Eclipse"
+      - "Sundered Sky"
+      - "Black Cleaver"
+      - "Executioner's Calling"
+    wave: "Freeze; punish walk-ups, or crash and roam."
+
+  Darius:
+    difficulty: "Even"
+    threats:
+      - "Pull + extended melee DPS"
+    you_win_if: "You play like a ranged champ—Q poke only; all-in only at lethal."
+    trading:
+      - "Stay outside E; if hit, W disengage and E his follow-up."
+      - "Post-6, try to E his R."
+    items:
+      - "Plated Steelcaps"
+      - "Eclipse"
+      - "Sundered Sky"
+      - "Black Cleaver"
+      - "Spear of Shojin"
+    wave: "Freeze; deny CS, don’t brawl extended."
+
+  Shen:
+    difficulty: "Medium-Easy"
+    threats:
+      - "W zone (denies autos) + global"
+    you_win_if: "You Q-poke to low HP then short-all-in; save E for taunt or Q."
+    trading:
+      - "W after his E so he can’t taunt-flip trade."
+    items:
+      - "Mercury Treads"
+      - "Eclipse"
+      - "Black Cleaver"
+      - "Sundered Sky"
+    wave: "Push to punish his ult; track map before roaming."
