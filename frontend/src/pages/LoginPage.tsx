@@ -100,7 +100,8 @@ export default function LoginPage({ onSuccess }: Props) {
       // progress: accelerate quickly then slow near 90%
       tickRef.current = window.setInterval(() => {
         setProgress((p) => {
-          const next = p < 70 ? p + 3 + Math.random() * 3 : p < 90 ? p + 0.8 + Math.random() * 0.8 : p;
+          const next =
+              p < 70 ? p + 3 + Math.random() * 3 : p < 90 ? p + 0.8 + Math.random() * 0.8 : p;
           return Math.min(next, 90);
         });
       }, 200);
@@ -118,13 +119,13 @@ export default function LoginPage({ onSuccess }: Props) {
     };
   }, [loading, randomQuote]);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function runFetch(limit?: number) {
     setError(null);
     setLoading(true);
     try {
       const cleanedTag = `#${tag.replace(/^#*/, "")}`;
-      const data = (await fetchYearSummaryByRiotId(name.trim(), cleanedTag)) as YearSummary;
+      // NOTE: client should pass limit only for the quick mode (e.g., 100)
+      const data = (await fetchYearSummaryByRiotId(name.trim(), cleanedTag, { limit })) as YearSummary;
 
       // finish bar
       setProgress(100);
@@ -133,10 +134,16 @@ export default function LoginPage({ onSuccess }: Props) {
       setProgress(100);
       setError(err?.message ?? "Failed to fetch summary");
     } finally {
-      // give the bar a split-second to reach 100 for a nicer feel
       setTimeout(() => setLoading(false), 250);
     }
   }
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    await runFetch(); // full year (no limit)
+  }
+
+  const canQuery = !loading && !!name && !!tag;
 
   return (
       <div className="min-h-screen relative overflow-hidden bg-lolBg">
@@ -165,9 +172,7 @@ export default function LoginPage({ onSuccess }: Props) {
 
             {/* Title */}
             <header className="px-8 pt-8 pb-4 text-center">
-              <h1 className="text-3xl font-extrabold tracking-wide text-lolGold drop-shadow">
-                Rift Rewind
-              </h1>
+              <h1 className="text-3xl font-extrabold tracking-wide text-lolGold drop-shadow">Rift Rewind</h1>
               <p className="mt-2 text-gray-300">
                 Enter your Riot <span className="text-gray-100 font-medium">name</span> and{" "}
                 <span className="text-gray-100 font-medium">tag</span>, then hit <em>Rewind</em>.
@@ -202,10 +207,24 @@ export default function LoginPage({ onSuccess }: Props) {
                   </div>
               )}
 
-              <div className="flex items-center gap-4">
-                <GlowButton type="submit" disabled={loading || !name || !tag}>
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* Full analysis (no limit) */}
+                <GlowButton type="submit" disabled={!canQuery}>
                   {loading ? "Rewinding…" : "Rewind!"}
                 </GlowButton>
+
+                {/* NEW: Quick Rewind – only 100 matches */}
+                <GlowButton
+                    type="button"
+                    disabled={!canQuery}
+                    onClick={() => runFetch(100)}
+                    className="bg-[#1b2e92] hover:bg-[#152673]"
+                    aria-label="Quick Rewind (analyze most recent 100 matches)"
+                    title="Analyze only the most recent 100 matches"
+                >
+                  {loading ? "Working…" : "Quick Rewind (100)"}
+                </GlowButton>
+
                 <span className="text-sm text-gray-400">
                 Example: <span className="text-gray-200">MK1Paris</span> /{" "}
                   <span className="text-gray-200">#NA1</span>

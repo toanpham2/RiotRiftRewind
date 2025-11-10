@@ -34,7 +34,6 @@ def _fmt2f(x: float) -> float:
 def _fmtpct(x: float) -> str:
   return f"{x * 100:.2f}%"
 
-
 def _overall_out(overall: Optional[dict]) -> Optional[dict]:
   if not overall:
     return None
@@ -45,7 +44,6 @@ def _overall_out(overall: Optional[dict]) -> Optional[dict]:
   o["csPerMin"] = _fmt2f(o["csPerMin"])
   o["visionPerMin"] = _fmt2f(o["visionPerMin"])
   return o
-
 
 def _champ_row_out(r: Optional[dict], pct_fields: List[str] = ("kp", "dmgShare")) -> Optional[dict]:
   if not r:
@@ -58,7 +56,6 @@ def _champ_row_out(r: Optional[dict], pct_fields: List[str] = ("kp", "dmgShare")
     if k in out and isinstance(out[k], (int, float)):
       out[k] = _fmtpct(out[k])
   return out
-
 
 def _project_top_champs(rows: List[dict], best_name: Optional[str], limit: int = 3) -> List[dict]:
   out = []
@@ -75,10 +72,8 @@ def _project_top_champs(rows: List[dict], best_name: Optional[str], limit: int =
       break
   return out
 
-
 def _top3(rows: List[dict]) -> List[dict]:
   return rows[:3] if rows else []
-
 
 # ----------------------------
 # Majority-role relabel (local, defensive)
@@ -117,7 +112,6 @@ def _majority_role_for_champ(matches: List[dict], puuid: str, champ_name: str) -
     return "top"
   return max(roles.items(), key=lambda kv: kv[1])[0]
 
-
 # ----------------------------
 # Feel-good quote & advice
 # ----------------------------
@@ -145,10 +139,6 @@ def _feel_good_prompt(player: str, champ: str) -> str:
   }, ensure_ascii=False)
 
 async def _summoner_id_from_recent_match(region: str, puuid: str) -> tuple[Optional[str], dict]:
-  """
-  Resolve encryptedSummonerId by inspecting the latest match's participants.
-  Returns (summonerId_or_None, debug_dict).
-  """
   dbg = {"__midProbeStatus": None, "__summIdFromMatch": False}
   try:
     async with RiotClient() as rc:
@@ -170,7 +160,6 @@ async def _summoner_id_from_recent_match(region: str, puuid: str) -> tuple[Optio
   except Exception as e:
     dbg["__midProbeStatus"] = f"err:{str(e)[:160]}"
     return (None, dbg)
-
 
 def _generate_feel_good(player: str, champ: str) -> str:
   try:
@@ -215,7 +204,6 @@ def _claude_year_advice(payload: dict) -> dict:
       "fun": fun_line
     }
 
-
 # ----------------------------
 # Tiny in-memory TTL cache (also cache final responses)
 # ----------------------------
@@ -238,7 +226,6 @@ class TTLCache:
 
 CACHE = TTLCache()
 
-
 async def _cached_puuid(region: str, name: str, tag: str) -> str:
   key = f"puuid:{region}:{name}#{tag}"
   hit = CACHE.get(key)
@@ -249,8 +236,48 @@ async def _cached_puuid(region: str, name: str, tag: str) -> str:
   CACHE.put(key, puuid, ttl=3600)
   return puuid
 
+# ------------ NEW: fast path to fetch ONLY most recent N matches ------------
+async def _fetch_recent_matches(region: str, puuid: str, limit: int) -> List[dict]:
+  if limit <= 0:
+    return []
+  ids: List[str] = []
+  start = 0
+  async with RiotClient() as rc:
+    while len(ids) < limit:
+      need = min(100, limit - len(ids))
+      page = await rc.match_ids(region, puuid, start=start, count=need)
+      if not page:
+        break
+      ids.extend(page)
+      if len(page) < need:
+        break
+      start += need
 
-async def _cached_all_matches(region: str, puuid: str) -> List[dict]:
+    sem = asyncio.Semaphore(6)  # ↓ from 12 to 6 to avoid bursts
+    async def _get(mid: str) -> Optional[dict]:
+      async with sem:
+        try:
+          return await rc.match(region, mid)
+        except Exception:
+          return None
+
+    results = await asyncio.gather(*[_get(mid) for mid in ids[:limit]])
+  return [m for m in results if m]
+
+async def _cached_all_matches(region: str, puuid: str, limit: Optional[int] = None) -> List[dict]:
+  """
+  If limit is provided (>0), fetch only the most recent N matches (fast path).
+  Otherwise, fetch full year since earliest split patch (existing behavior).
+  """
+  if limit and limit > 0:
+    key = f"matches_recent:{region}:{puuid}:{limit}"
+    hit = CACHE.get(key)
+    if hit is not None:
+      return hit
+    matches = await _fetch_recent_matches(region, puuid, limit)
+    CACHE.put(key, matches, ttl=300)
+    return matches
+
   earliest_lo = min(lo for (lo, _hi) in SPLITS.values())
   key = f"matches_all:{region}:{puuid}:{earliest_lo}"
   hit = CACHE.get(key)
@@ -259,7 +286,6 @@ async def _cached_all_matches(region: str, puuid: str) -> List[dict]:
   matches = await fetch_matches_since_patch(region, puuid, earliest_lo)
   CACHE.put(key, matches, ttl=900)
   return matches
-
 
 # ----------------------------
 # Platform/Region maps
@@ -287,7 +313,6 @@ async def _resolve_region_for_riot_id(game_name: str, tag_line: str) -> Optional
       continue
   return None
 
-
 async def _derive_platform_from_activity(region: str, puuid: str) -> Optional[str]:
   async with RiotClient() as rc:
     try:
@@ -309,7 +334,6 @@ async def _derive_platform_from_activity(region: str, puuid: str) -> Optional[st
       except Exception:
         continue
   return None
-
 
 # ----------------------------
 # Ranked lookup (expanded probing)
@@ -368,10 +392,6 @@ async def _league_entries_direct(platform: str, summ_id: str) -> List[dict]:
     return []
 
 async def _direct_summoner_by_puuid(platform: str, puuid: str) -> tuple[Optional[str], dict]:
-  """
-  Direct call to the platform host to resolve encrypted summonerId from puuid.
-  Returns (summoner_id_or_None, debug_dict).
-  """
   url = f"https://{platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}"
   headers = {"X-Riot-Token": os.getenv("RIOT_API_KEY")}
   timeout = httpx.Timeout(7.0, connect=5.0)
@@ -411,14 +431,12 @@ async def _cached_current_rank(
   if hit and not debug:
     return hit
 
-  # --- 0) Try to recover encryptedSummonerId from a recent match (most reliable)
   summ_id = None
   mid_dbg = {}
   sid_from_match, mid_dbg = await _summoner_id_from_recent_match(region_hint or "americas", puuid)
   if sid_from_match:
     summ_id = sid_from_match
 
-  # --- 1) If not found, try via RiotClient summoner-by-puuid on platform
   client_summ_err = None
   if not summ_id:
     async with RiotClient() as rc:
@@ -428,13 +446,12 @@ async def _cached_current_rank(
       except Exception as e:
         client_summ_err = str(e)[:200]
 
-  # --- 2) If still not found, try your direct HTTP call
   direct_dbg = {}
   if not summ_id:
     try:
       sid, direct_dbg = await _direct_summoner_by_puuid(plat, puuid)
       summ_id = sid
-    except Exception as _:
+    except Exception:
       pass
 
   if debug:
@@ -448,7 +465,6 @@ async def _cached_current_rank(
     if debug: out.update(dbg)
     return out
 
-  # --- 3) Fetch league entries (client first, then direct)
   entries = []
   client_rank_err = None
 
@@ -459,12 +475,10 @@ async def _cached_current_rank(
       client_rank_err = str(e)[:200]
       entries = []
 
-  # direct fallback (also by PUUID), in case your client class hit a transient error
   http_status = None
   http_preview = None
   if not entries:
     try:
-      import httpx, os
       url = f"https://{plat}.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}"
       headers = {"X-Riot-Token": os.getenv("RIOT_API_KEY")}
       timeout = httpx.Timeout(7.0, connect=5.0)
@@ -483,7 +497,6 @@ async def _cached_current_rank(
     dbg["__rankHttpStatus"] = http_status
     dbg["__rankHttpBodyPreview"] = http_preview
 
-  # --- 4) Choose SOLO first, else FLEX
   chosen = None
   for e in entries or []:
     if e.get("queueType") == "RANKED_SOLO_5x5":
@@ -509,7 +522,6 @@ async def _cached_current_rank(
     out.update(dbg)
   return out
 
-
 # ----------------------------
 # Best/Worst game helpers
 # ----------------------------
@@ -530,11 +542,6 @@ def _find_best_game(matches: List[dict], puuid: str) -> Optional[Tuple[str, int,
     if (best is None) or (key > best[0]):
       best = ((kda, k), (champ, k, d, a))
   return best[1] if best else None
-
-
-def _format_kda(k: int, d: int, a: int) -> str:
-  return f"{k}/{d}/{a}"
-
 
 def _year_fun_stat(matches: List[dict], puuid: str) -> Optional[dict]:
   worst = None
@@ -558,7 +565,6 @@ def _year_fun_stat(matches: List[dict], puuid: str) -> Optional[dict]:
     "text": f"Most deaths game: {worst['deaths']} on {worst['champ']} ({worst['k']}/{worst['deaths']}/{worst['a']}). We’ve all been there."
   }
 
-
 def _best_game_quote(player: str, champ: str, kda_str: str) -> str:
   system = (
     "You are Rift Rewind. Write ONE short, punchy praise line for the player's BEST game. "
@@ -575,7 +581,6 @@ def _best_game_quote(player: str, champ: str, kda_str: str) -> str:
     return raw.strip().strip('"').splitlines()[0].strip()[:200]
   except Exception:
     return f"{champ} clinic — {kda_str}. Clean, clinical, clutch."
-
 
 # ----------------------------
 # Assemble one split block (no split-level fun/standout)
@@ -633,7 +638,6 @@ def _build_split_block(split_id: str, all_matches: List[dict], puuid: str) -> di
     "topChamps": top_champs,
   }
 
-
 # ----------------------------
 # Year summary endpoint
 # ----------------------------
@@ -644,13 +648,14 @@ async def year_summary(
     includeFeelGood: bool = True,
     includeAdvice: bool = True,
     debugRank: bool = Query(False, description="Include rank platform probing details"),
-    forcePlatform: Optional[str] = None
+    forcePlatform: Optional[str] = None,
+    limit: int = Query(0, ge=0, le=500, description="If >0, analyze only the most recent N matches")
 ):
   if "#" not in riotId and "%23" not in riotId:
     raise HTTPException(400, "riotId must be Name#TAG (e.g., MK1Paris#NA1)")
   name, tag = riotId.replace("%23", "#").split("#", 1)
 
-  cache_key_resp = f"yearresp:{region}:{riotId}:{includeFeelGood}:{includeAdvice}:{debugRank}"
+  cache_key_resp = f"yearresp:{region}:{riotId}:{includeFeelGood}:{includeAdvice}:{debugRank}:L{limit}"
   hit_resp = CACHE.get(cache_key_resp)
   if hit_resp is not None:
     return hit_resp
@@ -662,9 +667,9 @@ async def year_summary(
     if not reg:
       raise HTTPException(404, "Could not resolve regional cluster for this Riot ID.")
 
-  # 2) PUUID + parallelize platform + matches
+  # 2) PUUID + parallelize platform + matches (matches observe limit)
   puuid = await _cached_puuid(reg, name, tag)
-  matches_task = asyncio.create_task(_cached_all_matches(reg, puuid))
+  matches_task = asyncio.create_task(_cached_all_matches(reg, puuid, limit if limit > 0 else None))
   platform_task = asyncio.create_task(_derive_platform_from_activity(reg, puuid))
   all_matches, platform = await asyncio.gather(matches_task, platform_task)
 
@@ -722,23 +727,7 @@ async def year_summary(
   top3_y_fmt_full = [_champ_row_out(r) for r in _top3(relabeled_y)]
   top3_y_fmt = _project_top_champs(top3_y_fmt_full, best_y_fmt.get("name") if best_y_fmt else None, limit=3)
 
-  # fun/best game
   fun_y = _year_fun_stat(bucket_matches_y, puuid)
-  def _find_best_game(matches: List[dict], puuid: str) -> Optional[Tuple[str, int, int, int]]:
-    best = None
-    for m in matches:
-      info = m.get("info", {})
-      you = next((p for p in info.get("participants", []) if p.get("puuid") == puuid), None)
-      if not you:
-        continue
-      k = you.get("kills", 0); d = you.get("deaths", 0); a = you.get("assists", 0)
-      champ = you.get("championName", "Unknown")
-      denom = max(1, d); kda = (k + a) / denom
-      key = (kda, k)
-      if (best is None) or (key > best[0]):
-        best = ((kda, k), (champ, k, d, a))
-    return best[1] if best else None
-
   best_game = _find_best_game(bucket_matches_y, puuid)
   best_game_out = None
   best_game_quote = None
@@ -748,7 +737,6 @@ async def year_summary(
     best_game_out = {"champion": bg_champ, "kda": kda_str}
     best_game_quote = _best_game_quote(f"{name}#{tag}", bg_champ, kda_str)
 
-  # LLM bits
   feel_good = None
   if includeFeelGood:
     player_display = f"{name}#{tag}"
@@ -784,7 +772,6 @@ async def year_summary(
       "advice": advice,
     }
   }
-
 
   if platform or forcePlatform:
     resp["currentRank"] = await _cached_current_rank(
