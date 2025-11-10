@@ -24,3 +24,20 @@ API docs at http://localhost:8000/docs
 - Backend: Render (Python Web Service), 
 - Frontend: Vercel (Root: `frontend/`)
  
+
+##Public url:
+https://riot-rift-rewind.vercel.app/
+
+Note on Initial Load Time (Cold Start)
+
+Because the backend performs full-match historical analysis and AI-powered breakdowns, the first request may take longer while the service initializes ("cold start").
+
+If you see a temporary 502 or Router External Target error on the FIRST run:
+
+- Wait 2–5 minutes for Quick Rewind
+- Wait 5–10 minutes for Full Rewind
+- Click the button again, the request will succeed once the backend is warm.
+
+This is normal behavior for serverless deployments using free-tier hosting, where backend containers spin down when idle.
+
+Once warmed up, subsequent requests run alot smoother.
