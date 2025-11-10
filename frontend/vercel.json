@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://riotriftrewind.onrender.com/"
+      "destination": "https://riotriftrewind.onrender.com/:path"
     }
   ]
 }
