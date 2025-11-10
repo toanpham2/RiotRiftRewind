@@ -25,7 +25,7 @@ API docs at http://localhost:8000/docs
 - Frontend: Vercel (Root: `frontend/`)
  
 
-##Public url:
+## Public url:
 https://riot-rift-rewind.vercel.app/
 
 Note on Initial Load Time (Cold Start)
