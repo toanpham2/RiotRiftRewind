@@ -410,14 +410,19 @@ async def fetch_matches_for_split(region: str, puuid: str, split: str,
       if not ids:
         break
 
-      results = await asyncio.gather(
-          *[rc.match(region, mid) for mid in ids],
-          return_exceptions=True
-      )
+      sem = asyncio.Semaphore(6)
+      async def _get(mid: str):
+        async with sem:
+          try:
+            return await rc.match(region, mid)
+          except Exception:
+            return None
+
+      results = await asyncio.gather(*[_get(mid) for mid in ids])
 
       oldest_this_page = None
       for m in results:
-        if isinstance(m, Exception):
+        if not isinstance(m, dict) or not m:
           continue
         info = m.get("info", {})
         gv = info.get("gameVersion", "")
@@ -426,9 +431,8 @@ async def fetch_matches_for_split(region: str, puuid: str, split: str,
         if within_patch_range(gv, lo, hi):
           collected.append(m)
 
-        if g_t != (0, 0):
-          if not oldest_this_page or g_t < oldest_this_page:
-            oldest_this_page = g_t
+        if g_t != (0, 0) and (oldest_this_page is None or g_t < oldest_this_page):
+          oldest_this_page = g_t
 
       if oldest_this_page and oldest_this_page < lo_t:
         break
@@ -439,10 +443,6 @@ async def fetch_matches_for_split(region: str, puuid: str, split: str,
 
 async def fetch_matches_since_patch(region: str, puuid: str, lo_patch: str,
     *, max_batches: int = 180, batch_size: int = 100) -> List[dict]:
-  """
-  Fetch all matches from the given lower-bound patch (inclusive) upward.
-  Stops paging once a page contains matches older than lo_patch.
-  """
   lo_t = patch_tuple(lo_patch)
   collected: List[dict] = []
   start = 0
@@ -453,26 +453,29 @@ async def fetch_matches_since_patch(region: str, puuid: str, lo_patch: str,
       if not ids:
         break
 
-      results = await asyncio.gather(
-          *[rc.match(region, mid) for mid in ids],
-          return_exceptions=True
-      )
+      sem = asyncio.Semaphore(6)
+      async def _get(mid: str):
+        async with sem:
+          try:
+            return await rc.match(region, mid)
+          except Exception:
+            return None
+
+      results = await asyncio.gather(*[_get(mid) for mid in ids])
 
       oldest_this_page = None
       for m in results:
-        if isinstance(m, Exception):
+        if not isinstance(m, dict) or not m:
           continue
         info = m.get("info", {})
         gv = info.get("gameVersion", "")
         g_t = patch_tuple(gv)
 
-        # Keep everything >= lo_patch; no upper bound.
         if g_t >= lo_t:
           collected.append(m)
 
-        if g_t != (0, 0):
-          if not oldest_this_page or g_t < oldest_this_page:
-            oldest_this_page = g_t
+        if g_t != (0, 0) and (oldest_this_page is None or g_t < oldest_this_page):
+          oldest_this_page = g_t
 
       if oldest_this_page and oldest_this_page < lo_t:
         break
