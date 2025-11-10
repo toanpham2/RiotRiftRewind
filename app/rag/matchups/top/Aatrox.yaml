@@ -1,0 +1,335 @@
+champion: Aatrox
+role: Top
+# Keep archetype simple so lookups/coercion are stable.
+archetype: bruiser
+
+identity_summary: >
+  Aatrox is a sustained-damage lane bully who excels in extended trades,
+  spacing-based skirmishing, and executing isolated targets through healing
+  resets. He wins with precise Q spacing, wave control, and forcing long fights
+  around cooldown windows.
+
+core_strengths:
+  - Best-in-class sustain + DPS in extended fights
+  - Massive zoning/burst with properly spaced Q1–Q3
+  - Excellent dive threat (E mobility + R healing)
+  - Thrives in long lanes where spacing matters
+  - High snowball potential off one winning trade
+
+core_weaknesses:
+  - Can be out-all-in’d by some bruisers
+  - Mobile skirmishers can outmaneuver Q windups
+  - Grievous Wounds + CC chains reduce impact
+  - Predictable Q pattern if poorly spaced
+
+optimal_runes:
+  primary: Precision
+  keystone: Conqueror
+  primary_runes:
+    - Triumph
+    - Legend: Tenacity
+    - Last Stand
+  secondary_tree: Resolve
+  secondary_choices:
+    - Second Wind
+    - Bone Plating
+  shards:
+    - Attack Speed
+    - Adaptive Force
+    - Flat Health
+
+# (Optional; your extractor ignores this, but keep for reference)
+alt_runes:
+  vs_hard_matchups:
+    - Primary tree: Resolve
+    - Keystone: Grasp of the Undying
+  vs_squishy:
+    - Primary tree: Domination
+    - Keystone: Electrocute
+
+summoners:
+  default: ["Flash", "Teleport"]
+  kill_pressure_lane: ["Flash", "Ignite"]
+
+core_items:
+  core:
+    preferred: Eclipse
+    alt:
+      - Black Cleaver
+      - Spear of Shojin
+      - Sundered Sky
+      - Hubris
+      - Profane Hydra
+      - Voltaic Cyclosword
+      - Serpent's Fang
+    notes: >
+      Eclipse, Spear of Shojin, and Sundered Sky are common first cores.
+      Cleaver vs early armor stack; lethality vs squishies; Serpent's Fang vs heavy shields.
+  boots:
+    - Plated Steelcaps
+    - Mercury Treads
+    - Ionian Boots of Lucidity
+  core_legendaries:
+    - Sterak’s Gage
+    - Death’s Dance
+    - Maw of Malmortius
+    - Guardian Angel
+
+situational_items:
+  vs_AD:
+    - Plated Steelcaps
+    - Death’s Dance
+  vs_AP:
+    - Maw of Malmortius
+    - Spirit Visage
+  vs_heavy_CC:
+    - Mercury’s Treads
+    - Sterak’s Gage
+  vs_tanks:
+    - Black Cleaver
+    - Serylda’s Grudge
+
+trading_pattern:
+  fundamentals: >
+    Control space with Q edges, force extended trades, and use E to reposition
+    each Q. Stagger Q1–Q3 to match enemy movement; land Q3 sweet spot for burst.
+  key_patterns:
+    - Q1 → small delay → Q2 (reposition) → E → Q3 finisher
+    - Weave autos between Qs (auto-reset)
+    - Trade when passive is up for big sustain
+    - Use E defensively early; offensively with jungler present
+  vs_melee:
+    - Punish CS attempts with Q1 edge
+    - Auto → Q3 once Bone Plating is down
+  vs_range:
+    - Farm with Q1/Q2 safely; avoid extended poke
+    - Save E strictly to dodge key skillshots
+
+wave_management:
+  lvl1:
+    - Let wave push toward you to avoid early poke
+  lvl3:
+    - Fight around Q cooldowns; crash second wave if winning
+  lvl4–5:
+    - Slow push → build big wave → trade with river control
+  mid_game:
+    - Create long lane for isolated kills
+  late_game:
+    - Group when sidelanes are pushed; front-to-back with R or flank and execute carries
+
+jungle_coordination:
+  your_jg_ganks:
+    - Time E + Q3 with jungler CC to guarantee kill
+    - Ping before stacking wave for dive
+  enemy_jg_ganks:
+    - If you E forward, back off immediately
+    - Ward deep brush; you’re vulnerable without E
+
+timing_spikes:
+  lvl3: Full Q rotation unlocked — big trading spike
+  lvl6: Massive healing + kill pressure with World Ender
+  Goredrinker: Core sustain spike for extended fights
+  2_items: Peak dueling power
+  3_items: Teamfight carry potential
+
+---
+
+matchups:
+
+  Renekton:
+    difficulty: Even/Skill
+    threats:
+      - Empowered W stops extended trades
+      - Very strong short trades
+      - Big level-6 all-in
+    you_win_if: Space around his dash windows and fight on low Fury.
+    trading:
+      - Never E into him; he will stick and dodge Q sweet spots
+      - Q → E backward to space his E
+      - Look for extended trade after his short combo is down
+    items:
+      - Plated Steelcaps
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Hold a freeze in front of tower to trade safely
+
+  Pantheon:
+    difficulty: Hard
+    threats:
+      - Point-and-click stun denies Q spacing
+      - E can negate Q3
+      - Long-range Q poke
+    you_win_if: Respect early windows and outscale post-6.
+    trading:
+      - Q → E backward can cancel his W jump timing
+      - After he blocks Q3 with E, you can W pull to extend and cycle Qs again
+      - Trade after his W or E is used
+    items:
+      - Plated Steelcaps
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Let it push into you early
+
+  Mordekaiser:
+    difficulty: Even/Skill
+    threats:
+      - Long-fight stat check
+      - W shield blunts combo damage
+    you_win_if: Avoid E pull and kite his passive stacks.
+    trading:
+      - Land Q edges to space him
+      - Fight only with E up to dodge/space his abilities
+      - Kite/space inside his ult with Qs + R
+    items:
+      - Mercury Treads
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Thin wave; avoid big stacks
+
+  Ornn:
+    difficulty: Easy
+    threats:
+      - Brittle combos hurt but are predictable
+    you_win_if: Abuse Q spacing to deny melee access and heal through trades.
+    trading:
+      - Disengage when Brittle is up
+      - Use long lane for repeated Q3 hits
+      - You can stat-check him with sustain
+    items:
+      - Mercury Treads
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Slow push then zone
+
+  Teemo:
+    difficulty: Easy
+    threats:
+      - Blind + ranged poke
+    you_win_if: Lethality Qs land consistently.
+    trading:
+      - Electrocute burst: Q1 → W → Q2 + E → Q3 to chunk/kill
+    items:
+      - Mercury Treads
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Let him push 1–3; then punish walk-ups by keeping wave on your side
+
+  Sion:
+    difficulty: Easy
+    threats:
+      - E → charged Q + W pop
+    you_win_if: Out-DPS and heal through trades.
+    trading:
+      - Q interrupts his Q charge
+      - Simple outtrade patterns
+    items:
+      - Plated Steelcaps
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Free wave control; stack + crash for plates or keep on your side
+
+  Volibear:
+    difficulty: Even
+    threats:
+      - Early all-in + tower disable
+    you_win_if: Kite Q/E and deny W heal windows.
+    trading:
+      - Play at Q max range; don’t get Q→E
+      - Q3 to break his engage
+      - Deny W bite heal
+    items:
+      - Plated Steelcaps
+      - Mercury Treads
+      - Eclipse
+      - Executioner's Calling
+      - Serpent's Fang
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Crash early; avoid dive
+
+  Jax:
+    difficulty: Hard
+    threats:
+      - Wins most straight all-ins
+    you_win_if: Force short Q-edge hits; disengage during E.
+    trading:
+      - Save E for his Counterstrike activation
+      - Hit Q edges only
+      - QE can cancel his leap but it’s risky to pre-read
+    items:
+      - Plated Steelcaps
+      - Mercury Treads
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Let wave come to tower
+
+  Shen:
+    difficulty: Easy
+    threats:
+      - Short reliable trades + global pressure
+    you_win_if: Win extended fights and deny taunt angles.
+    trading:
+      - Trade after he uses Q return
+      - Bait E with short spacing movements
+    items:
+      - Mercury Treads
+      - Eclipse
+      - Sundered Sky
+      - Spear of Shojin
+      - Black Cleaver
+      - Sterak’s Gage
+      - Death’s Dance
+    wave: Push to punish his ultimate
+
+---
+
+macro_advice:
+  early_game: >
+    Play around Q spacing and deny enemy short trades. Track junglers carefully
+    — you’re vulnerable without E. Manage the wave to create long-lane duels.
+  mid_game: >
+    Look for skirmishes in river/chokes. You peak on 1–3 items; force fights
+    when World Ender is available.
+  late_game: >
+    Front-to-back with E reposition + Q3 knock-ups, or flank to execute carries.
+
+common_mistakes:
+  - Using Q3 without confirming enemy movement
+  - Taking extended fights vs stat-checkers (e.g., Jax, Darius) when behind
+  - E’ing forward without jungler tracking
+  - Trading into CC-heavy windows
+
+feel_good_template: >
+  Aatrox isn’t just your weapon — he’s your embodiment of unstoppable pressure.
+  Every perfectly spaced Q reminds opponents they’re fighting the Darkin.

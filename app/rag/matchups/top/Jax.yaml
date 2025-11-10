@@ -1,0 +1,172 @@
+champion: Jax
+role: Top
+# Keep this a base key your code understands
+archetype: bruiser
+
+summary: >
+  Jax is a hyper-scaling duelist who controls trades around Counter Strike.
+  Play short, winning windows early, then take long lanes and side-lane once
+  you hit Sheen → Trinity spikes.
+
+laning_plan:
+  - Contest level 1 with E only if safe; otherwise last-hit to 2/3.
+  - Take short, scripted trades around E; don’t commit Q first.
+  - Crash on Sheen timing; freeze when behind or vs heavy burst.
+  - Default to long lane after Trinity to pressure sidelane.
+
+trading:
+  - Lead with movement → E → (Q if needed) → AA → W reset → stun to end.
+  - Never Q first unless their dash is down or kill is guaranteed.
+  - Ward-jump with Q to escape or extend.
+  - Versus melee: short trades if they win extended; otherwise stack passive and run long.
+  - Versus ranged: don’t fight pre-3; use brush for grasp/W taps.
+
+runes:
+  - Lethal Tempo, Triumph, Legend: Alacrity, Last Stand
+  - Secondary (Resolve): Demolish, Second Wind (or Unflinching vs CC)
+  - Shards: Attack Speed, Adaptive Force, Armor/MR
+  - Alt page (vs short-trade lanes): Grasp of the Undying + Demolish/Second Wind, Secondary Inspiration (Biscuits, Cosmic Insight)
+
+items:
+  - Start: Doran’s Blade or Doran’s Shield vs poke
+  - Core: Trinity Force → Sundered Sky
+  - Alts: Nashor’s Tooth, Wit's End, Ravenous Hydra, Blade of the Ruined King (vs HP tanks/ Sion)
+  - Boots: Plated Steelcaps / Mercury Treads / Ionian Boots of Lucidity
+  - Defense: Frozen Heart, Sterak’s Gage, Death’s Dance, Zhonya’s (tech)
+
+checklist:
+  - Track E cooldowns on both sides; never waste E into nothing.
+  - Hold Q for gap-close/escape; ward-jump is your panic button.
+  - Fight on Sheen/Trinity timings; ping jungler 20s before setup.
+  - Maintain long lane after first item; force isolated fights.
+
+skill_tips:
+  - Weave W to proc Sheen; W range is longer than AA.
+  - Buffer Q during E to arrive as stun lands.
+  - Save E to block key on-hit/auto windows (Renekton W, Volibear Q/W).
+  - Use brush to break Teemo vision and deny blind uptime.
+
+power_spikes:
+  - "Lvl2: empowered trades and auto resets"
+  - "Lvl3: full combo online"
+  - "Sheen: massive damage spike on W"
+  - "2 items: near-unanswerable in sidelane"
+  - "3 items: peak duelist"
+
+matchups:
+  Renekton:
+    difficulty: "Hard early → Easy later"
+    threats:
+      - "Empowered W burst/lockdown"
+      - "50 Fury short-trade windows"
+    you_win_if: "Survive early, contest on Sheen/Trinity, or take ignite LT level-1 prio."
+    trading:
+      - "Never fight 50 Fury; E his W, long-trade when his W/E are down."
+      - "Look for W sheen-proc taps; Q only after he dashes."
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force"
+      - "Sterak’s Gage"
+      - "Frozen Heart"
+    wave: "Hold close to tower pre-Sheen; freeze if behind."
+
+  Pantheon:
+    difficulty: "Hard early → Even later"
+    threats:
+      - "Point-and-click stun + spear poke"
+      - "Global pressure with R"
+    you_win_if: "Dodge spears, don’t jump first, scale to Trinity."
+    trading:
+      - "Grasp W taps; bait W/E before committing Q."
+      - "Fight only after his E or W is down."
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force"
+      - "Frozen Heart"
+      - "Sterak’s Gage"
+    wave: "Keep wave near tower; punish missed Qs."
+
+  Volibear:
+    difficulty: "Medium (AP Voli → Mercs)"
+    threats:
+      - "Strong lvl3 all-in + tower disable"
+      - "Good waveclear"
+    you_win_if: "E his Q and W; deny W2 heal; drag out trades."
+    trading:
+      - "Stun during Q; fight when W2 is down."
+    items:
+      - "Plated Steelcaps or Mercs"
+      - "Trinity Force"
+      - "Wit’s End (AP)"
+      - "Sterak’s Gage"
+    wave: "Slow push into safe crash; avoid dive timers."
+
+  Mordekaiser:
+    difficulty: "Skill"
+    threats:
+      - "Full-stack passive + pull → wins long if you botch E"
+      - "Steals stats in R"
+    you_win_if: "Dodge E/Q, chip before R, stun-kite in R."
+    trading:
+      - "Q auto-resets on cooldowns; level-1 E to deny passive."
+    items:
+      - "Mercury Treads"
+      - "Trinity Force"
+      - "Wit’s End"
+      - "Sterak’s Gage"
+    wave: "Don’t allow perma-freeze; keep mid-lane placement."
+
+  Ornn:
+    difficulty: "Easy"
+    threats:
+      - "Brittle empowered autos"
+    you_win_if: "Long trades and brittle denial with E."
+    trading:
+      - "E negates brittle hit; W → auto reset windows."
+    items:
+      - "Mercury Treads"
+      - "Trinity Force"
+      - "Wit’s End (AP heavy)"
+      - "Sterak’s Gage"
+    wave: "Push and chip plates; track jungler."
+
+  Teemo:
+    difficulty: "Very Hard"
+    threats:
+      - "Blind + ranged poke"
+    you_win_if: "Use brush to dodge poke; survive to items."
+    trading:
+      - "Only after blind; grasp W taps for sustain."
+    items:
+      - "Mercury Treads"
+      - "Trinity Force"
+      - "Wit’s End"
+      - "Ravenous Hydra"
+    wave: "Hold outside tower; punish missteps."
+
+  Sion:
+    difficulty: "Medium"
+    threats:
+      - "Q/W/E zoning and perma-wave"
+    you_win_if: "Blade of the Ruined King + long trades."
+    trading:
+      - "Dodge Q, then run him down with E up."
+    items:
+      - "Plated Steelcaps"
+      - "Trinity Force"
+      - "Blade of the Ruined King"
+      - "Frozen Heart"
+    wave: "Slow push → crash → reset; deny perma-freeze."
+
+  Shen:
+    difficulty: "Easy"
+    threats:
+      - "Short Q trades + taunt"
+    you_win_if: "Force extended fights; punish W cooldown."
+    trading:
+      - "Fight when W is down; save E for taunt."
+    items:
+      - "Sundered Sky"
+      - "Blade of the Ruined King"
+      - "Plated Steelcaps"
+    wave: "Contest constantly; keep TP/dive timers in mind."

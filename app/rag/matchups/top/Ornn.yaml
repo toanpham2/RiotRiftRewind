@@ -1,0 +1,199 @@
+champion: Ornn
+role: Top
+archetype: tank
+
+summary: >
+  Ornn is a scaling, low-econ tank who stabilizes lanes and wins games with
+  reliable engage and item upgrades. Lane on short, Grasp-based trades and
+  brittle procs; avoid extended fights vs sustained DPS. Your job is to
+  neutralize early, front-line mid game, and anchor 5v5s late.
+
+laning_plan:
+  - Play for short Grasp trades; proc brittle, then disengage.
+  - Keep the wave near your tower vs melee; fast push vs ranged to break poke loops.
+  - Craft components in lane to sustain and avoid bad recalls.
+  - Hold E unless you have wall/pillar setup or clear jungle cover.
+  - Save W to deny CC or guarantee a brittle proc on your terms.
+
+trading:
+  - Q → W (brittle) → Auto; walk out.
+  - Q pillar → E knock-up if they misstep.
+  - W through enemy CC to stay Unstoppable and force brittle.
+  - Only commit long if jungler is present or their mobility is down.
+
+runes:
+  - Resolve: Grasp of the Undying, Demolish, Second Wind/Bone Plating, Overgrowth
+  - Inspiration: Biscuit Delivery, Cosmic Insight
+  - Shards: Attack Speed, Scaling Health, Flat Health
+  - Alt Keystone: Aftershock (when you can’t reliably proc Grasp)
+
+items:
+  - Start: Doran’s Shield + Refillable (vs poke) or Doran’s Ring (push) + Refillable
+  - Core: Hollow Radiance (AP/neutral), Sunfire Aegis (AD waves), Unending Despair
+  - Boots: Plated Steelcaps / Mercury Treads / Ionian Boots of Lucidity
+  - Alternatives: Iceborn Gauntlet, Frozen Heart, Heartsteel
+  - MR/Anti-burst: Abyssal Mask, Force of Nature, Kaenic Rookern, Spirit Visage
+  - Anti-crit: Randuin’s Omen
+  - Grievous: Bramble Vest → Thornmail
+
+checklist:
+  - Track ward timers ~2:45 and ~5:00; ping ~20s before setup.
+  - Hold E for pillar/wall setups; don’t throw it to poke.
+  - Play around brittle windows; don’t chase extended.
+  - Upgrade ally mythics as soon as you hit 13/14/15/16.
+
+skill_tips:
+  - W makes you Unstoppable; time it into enemy CC to keep trading.
+  - E only knocks up if you hit terrain — including your Q pillar.
+  - Q slows and sets terrain; place slightly behind targets to cut paths.
+  - R2 can be buffered to catch flashes/dashes; think two steps ahead.
+
+power_spikes:
+  - "Lvl3: first reliable brittle trade pattern online"
+  - "Lvl6: long-range engage with jungler follow-up"
+  - "2 items: very hard to kill; clears waves instantly"
+  - "Lvl13: begin upgrading ally items"
+  - "Lvl16: team power spike — multiple upgrades"
+
+matchups:
+
+  Darius:
+    difficulty: "Hard"
+    threats:
+      - "True damage bleed and extended DPS"
+      - "E pull interrupts E timing; long trades favored"
+    you_win_if: "You avoid extended fights and only take Grasp brittle taps."
+    trading:
+      - "Short trade W → brittle → leave; never brawl on 5 stacks."
+    items:
+      - "Plated Steelcaps"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+      - "Thornmail"
+    wave: "Freeze near tower; he struggles to dive full HP Ornn."
+
+  Renekton:
+    difficulty: "Medium-Hard"
+    threats:
+      - "Empowered W stun and strong level-6 all-in"
+      - "Wins both short and long trades early"
+    you_win_if: "You tank his window, brittle punish, and outscale."
+    trading:
+      - "Only W→brittle taps; E commit only near your tower."
+    items:
+      - "Plated Steelcaps"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+      - "Thornmail"
+    wave: "Keep wave close to your tower; minimize his short-trade loops."
+
+  Aatrox:
+    difficulty: "Even"
+    threats:
+      - "Sustained DPS and long-range Q spacing"
+    you_win_if: "You deny Q3 with E or space Q1/Q2; W through his CC chain."
+    trading:
+      - "W brittle safety trade; back out after one rotation."
+    items:
+      - "Plated Steelcaps"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+      - "Thornmail"
+    wave: "Slow push early to avoid getting poked under tower."
+
+  Camille:
+    difficulty: "Medium"
+    threats:
+      - "True damage Q2 and high mobility; can dodge R with R"
+    you_win_if: "You land predictive Q → W → E and don’t give her long lanes."
+    trading:
+      - "Punish her E or R attempt with brittle knock-up."
+    items:
+      - "Plated Steelcaps"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+    wave: "Freeze; punish her approach angles."
+
+  Jax:
+    difficulty: "Even"
+    threats:
+      - "Counter Strike dodges brittle autos; strong split"
+    you_win_if: "You out-teamfight him and deny tower procs."
+    trading:
+      - "W brittle after his E ends; E away from his engage."
+    items:
+      - "Plated Steelcaps"
+      - "Frozen Heart"
+      - "Hollow Radiance"
+      - "Unending Despair"
+    wave: "Hold in front of tower or insta-clear with Hollow to deny Demolish."
+
+  Shen:
+    difficulty: "Easy"
+    threats:
+      - "Short trades and W auto-deny; global R"
+    you_win_if: "You outstat and outscale; punish R cooldowns."
+    trading:
+      - "Q → W → E; brittle proc with auto when he’s outside W."
+    items:
+      - "Plated Steelcaps"
+      - "Frozen Heart"
+      - "Hollow Radiance"
+      - "Unending Despair"
+    wave: "Push and punish his ult windows."
+
+  Pantheon:
+    difficulty: "Medium"
+    threats:
+      - "Point-and-click stun and high-range Q poke; roaming R"
+      - "E can negate brittle damage if mistimed"
+    you_win_if: "Second Wind + Doran’s Shield; armor stack and outscale."
+    trading:
+      - "Only commit after he uses W/E; otherwise Q poke + Grasp taps."
+    items:
+      - "Plated Steelcaps"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+    wave: "Let him push early; farm safely and conserve HP."
+
+  Sion:
+    difficulty: "Easy"
+    threats:
+      - "Proxy and infinite HP scaling; Demolish pressure"
+    you_win_if: "You win trades with brittle and out-impact fights."
+    trading:
+      - "Q → W → E brittle; interrupt his Q with your Q/E or tank with W."
+    items:
+      - "Plated Steelcaps"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+    wave: "Push him in; he can’t contest under tower."
+
+  Teemo:
+    difficulty: "Hard"
+    threats:
+      - "Range + blind + shrooms"
+    you_win_if: "You survive lane and hit Hollow Radiance quickly."
+    trading:
+      - "Doran’s Shield + Second Wind; Q poke for Grasp only."
+    items:
+      - "Mercury Treads"
+      - "Hollow Radiance"
+      - "Unending Despair"
+    wave: "Catch waves and rush Hollow Radiance to insta-clear."
+
+  Volibear:
+    difficulty: "Medium"
+    threats:
+      - "Early all-in and tower disable"
+    you_win_if: "You short trade, kite Q, and deny W2 heal."
+    trading:
+      - "Q when he runs at you; W his Q; E away from his E; never give W2."
+    items:
+      - "Plated Steelcaps"
+      - "Mercury Treads"
+      - "Hollow Radiance"
+      - "Sunfire Aegis"
+      - "Unending Despair"
+      - "Thornmail"
+    wave: "Freeze and force overextends; his passive/E will auto-push."

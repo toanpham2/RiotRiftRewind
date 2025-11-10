@@ -1,0 +1,267 @@
+champion: Mordekaiser
+role: Top
+archetype: "AP Juggernaut — DPS Bruiser — Duelist — Anti-Carry Isolator"
+
+identity_summary: >
+  Mordekaiser is a stat-checking AP juggernaut who excels at extended trades,
+  skirmishes, and isolating priority targets with Realm of Death. His laning 
+  revolves around slow, inevitable pressure through passive DPS, wave control, 
+  and punishing melee champions who cannot escape his zoning. While immobile, 
+  his raw numbers, shielding, and sustained damage let him dominate 1v1s and
+  front-to-back teamfights when positioned correctly.
+
+core_strengths:
+  - "Top-tier extended DPS with three-hit passive"
+  - "Very strong in isolated 1v1 once passive + R are active"
+  - "Can nullify enemy carry impact with Realm of Death"
+  - "Tanky due to W shield + heal"
+  - "Amazing level 3 power spike"
+  - "Naturally strong vs melee matchups without mobility"
+  - "Extremely strong level 6 power spike"
+
+core_weaknesses:
+  - "Kiteable; suffers vs range"
+  - "Weak pre-3 if poked out"
+  - "Telegraphed abilities — E and Q are predictable"
+  - "Relies heavily on landing Q and getting passive uptime"
+  - "Vulnerable to jungle ganks (no mobility) pre 6"
+  - "Can be outscaled by other duelist champions"
+
+optimal_runes:
+  primary_tree: "Precision"
+  keystone: "Conqueror"
+  primary_runes:
+    - Triumph
+    - Legend: Tenacity or Alacrity
+    - Last Stand
+  secondary_tree: "Resolve"
+  secondary_runes:
+    - Second Wind (vs poke)
+    - Bone Plating (vs melee)
+  shards:
+    - Adaptive Force
+    - Adaptive Force
+    - Flat health
+
+alt_runes:
+  secondary_tree: "Inspiration"
+  secondary_runes:
+    - Biscuit Delivery
+    - Approach Velocity (rush Rylai's Crystal Scepter )
+summoners:
+  default: ["Flash", "Teleport"]
+  kill_lane: ["Flash", "Ignite"]
+
+core_items:
+  core:
+    preferred: "Riftmaker"
+    alt: ["Liandry's Torment", "Bloodletter's Curse", "Rylai's Crystal Scepter", "Hextech Rocketbelt"]
+    notes: "Riftmaker rush if you want more dps against stat check champions, Liandry's if you want more damage against health stack champions, Rylai's Crystal Scepter is good if you are running approach velocity or if you want more sticking power to faster champions, Hextech Rocketbelt can work against ranged characters  "
+  boots:
+    - Plated Steelcaps
+    - Mercury Treads
+  core_legendaries:
+    - Liandry's Torment
+    - Bloodletter's Curse
+    - Rylai's Crystal Scepter
+    - Cosmic Drive
+    - Hextech Rocketbelt
+    - Experimental Hexplate
+    - Unending despair
+    - Jak'Sho, The Protean
+    - Randuin's Omen
+    - Spirit Visage
+    - Morello
+
+situational_items:
+  vs_AD:
+    - "Randuin’s Omen"
+    - "Thornmail"
+  vs_AP:
+    - "Force of Nature"
+    - "Spirit Visage"
+  vs_tanks:
+    - "Liandry’s"
+  vs_sustain:
+    - "Morello"
+
+trading_pattern:
+  fundamentals: >
+    Mordekaiser wins through extended trades. Do NOT commit to burst patterns —
+    instead, walk forward, land E → Q → auto to proc passive, then stay
+    in melee to maximize DPS. against champs that beat you in an extended trade like Tryndamere, Olaf, Darius, etc, Q poke until they are low enough to all in with E -> Q -> auto -> passive extended trade.
+  key_patterns:
+    - "E → Q -> Auto passive proc"
+    - "Use W shield to block key damaging ability"
+    - "Use W shield to heal if the shield is not the best option (such as against Renekton) or if you need lane sustain"
+    - "E -> R to guarantee the E hit as R very briefly slow the target by 75%"
+    - "Stand behind the Target as you ult so the target has less space to move away from you in Death realm, as Death realm spawns different depending on where you are in relation to the target"
+
+wave_management:
+  level_1: "Slow push → crash 3rd wave → let cannon wave bounce back to the middle to trade or crash the 4th wave for a recall"
+  vs_melee: "Freeze near tower, punish with E pulls"
+  vs_range: "Can get wave prio if you hit the wave and enemy with Q, if the wave stacks and is pushing torwards them it's hard for them to poke"
+  vs_jungle_pressure: "Keep wave thin and tight to avoid ganks"
+
+jungle_coordination:
+  your_jg_ganks:
+    - "Pull enemy with E into your jungler"
+    - "Walk behind the opponent so they cannot escape"
+  enemy_jg_ganks:
+    - "Fight 2v2 if Conqueror stacks"
+    - "ult the weaker of the 2 enemy if you have r, mostly will win the 1v2 or 2v2"
+
+timing_spikes:
+  lvl3: "Strongest early game moment"
+  Riftmaker: "Huge power spike for sustained trades"
+  2 items: "Becomes unkillable in extended fights"
+  lvl6: "Auto-wins most isolated duels, basically un-gankable as long as you have ult, as you can take and win 2 isolated 1v1s"
+
+---
+
+matchups:
+
+  Aatrox:
+    difficulty: "Medium"
+    threats:
+      - "Outranges you, can space you with Q sweet spot"
+      - "Can dodge Q with E dash"
+    you_win_if: "Land your Q, if you dont' fall behind pre 6, you can win the level 6 all in with your ult, very hard for him to win the 1v1 if you have riftmaker and rylais"
+    trading:
+      - "If he burns E, run him down with passive"
+    items: ["Plated Steelcaps", "Riftmaker", "Rylai's", "Oblivion orb", "Liandry's"]
+    wave: "contest for wave control from level 1 as his level 1 is weak, then look to either wave 2 crash or wave 3 crash, either let wave 4 bounce and trade or crash wave 4 to look for a recall, depend on where enmy jungle is. Afterward you can look to freeze and punish or stack wave and crash for tower plate if you have wave control"
+
+  Camille:
+    difficulty: "easy"
+    threats:
+      - "True damage Q2"
+      - "High mobility avoids your Q and E"
+    you_win_if: "You land E Q and keep her in extended fights"
+    trading:
+      - "W shield to absorb Q2 true damage"
+      - "E her E"
+      - "avoid trading into her passive shield"
+      - "You will beat her in an all in fight with your ult"
+    items: ["Plated Steelcaps", "Riftmaker", "Rylai's", "Liandry's"]
+    wave: "you should have wave control in this match up either freeze the wave and look for an all in angle when she walks up to farm or look to stack and crash waves for tower plates"
+
+  Darius:
+    difficulty: "Hard"
+    threats:
+      - "Outstats you levels 1–5"
+    you_win_if: "You kite/poke him down him with Q before all in"
+    trading:
+      - "Do not fight until 2 items unless ahead or if you know you can kill him, only Q poke, can disengage with E by using E to pull him away"
+    items: ["Plated Steelcaps", "Riftmaker", "Rylai's", "Liandry's"]
+    wave: "Keep wave slightly on your side so he can't use ghost to run you down, hard to get wave control in this match up unless ahead"
+
+  Fiora:
+    difficulty: "Very Hard"
+    threats:
+      - "Parry (W) destroys Q and E"
+      - "Outscales hard"
+      - "Percentage max health true damage destroy you even if you itemize tank items"
+      - "very mobile so it's hard to land your slow skill shots"
+    you_win_if: "You bait Parry with step-in auto feints then punish, and play very carefully around her vitals, dodge vitals or hide them in walls to deny"
+    trading:
+      - "Only commit when W is down or if she is low"
+    items: ["Plated Steelcaps", "Riftmaker", "Rylai's", "Bramble Vest", "Liandry's"]
+    wave: "Freeze and try to keep wave on your side as she can run you down, hard to get wave control in this match up unless ahead"
+
+  Jax:
+    difficulty: "Medium-skill"
+    threats:
+      - "he can win in extended fight if he plays correctly, dodging your abilities"
+      - "he can hard win level 1 - 2 if he runs lethal tempo and ignite"
+      - "E can deny passive"
+    you_win_if: "you can proc passive and land your abilities"
+    trading:
+      - "Start trades after his E ends, use your e to deny his stun with E, don't let him get in more damage after E "
+    items: ["Plated Steelcaps", "Riftmaker", "Rylai's", "Liandry's"]
+    wave: "contest for wave control from level 1, then look to either wave 2 crash or wave 3 crash, either let wave 4 bounce and trade or crash wave 4 to look for a recall, depend on where enmy jungle is. Afterward you can look to freeze and punish or stack wave and crash for tower plate if you have wave control"
+
+  Olaf:
+    difficulty: "Very Hard"
+    threats:
+      - "He can run you down at any level if he lands Q"
+      - "Very strong and beat you in extended fight"
+      - "if he ults before you, your ult won't work on him"
+    you_win_if: "You survive early game and fight post-Riftmaker + oblivion orb or Bramble Vest"
+    trading:
+      - "Use W to absorb true damage chunks"
+    items: ["Plated Steelcaps", "Thornmail","Riftmaker",  "Liandry's"]
+    wave: "Let Olaf push → freeze, try to deny his freeze if you can and call jungler to help with the freeze if need be, it's hard to get wave control in this match up unless you are very ahead"
+
+  Ornn:
+    difficulty: "Medium-Easy"
+    threats:
+      - "Tankiness and CC"
+      - "Can burst you down with triple brittle combo"
+      - "his W can negate your ult"
+    you_win_if: "as long as you space out the brittle proc and don't let yourself but chain cced, you should win the extended fight quite easily, don't ult his W"
+    trading:
+      - "W his brittle proc if you gets marked by it, Q spam on him, if he has to W your E he can't mark you with brittle unless he has ult, your ult deny his ult as long as you don't ult his W, watch out for his Q->W>E combo"
+    items: ["Mercury's Treads", "Riftmaker", "Rylai's", "Bloodletter's Curse", "Liandry's"]
+    wave: "you should have wave control in this match up either freeze the wave and look for an all in angle when he walks up to farm or look to stack and crash waves for tower plates"
+
+  Renekton:
+    difficulty: "Even"
+    threats:
+      - "Short trade burst beats your early extended trades"
+      - "his W breaks your W shield"
+      - " his level 6 all in can beat yours"
+      - "he is mobile with his E so he can dodge your abilities "
+    you_win_if: "You survive level 3 - 6, you land your abilities and use W for the heal"
+    trading:
+      - "Q poke, W to heal, E when he walk up to cs and try to get your passive, you can stat check in him an extended fight"
+    items: ["Mercury's Treads", "Riftmaker", "Rylai's", "Bloodletter's Curse", "Liandry's"]
+    wave: "if you have wave control, freeze the wave and look for an all in angle when he walks up to farm or look to stack and crash waves for tower plates"
+
+  Sett:
+    difficulty: "medium"
+    threats:
+      - "True damage punch"
+      - "can stat check you early in extended fight"
+      - "E guarantees W"
+    you_win_if: "You kite with passive MS and avoid being pulled and avoid his W true damage"
+    items: ["Plated Steelcaps", "Riftmaker", "Rylai's", "Liandry's"]
+    wave: "Keep wave thin; Sett hard punishes shoves"
+
+  Shen:
+    difficulty: "Easy"
+    threats:
+      - "Spirit’s Refuge blocks your autos"
+      - "his ult can heavily impact the map"
+    you_win_if: "You win all extended fights against him, can E him back if he E to escape, your E can cancel his ult, your ult cancel his ult"
+    items: ["Mercury's Treads", "Riftmaker", "Rylai's", "Bloodletter's Curse", "Liandry's"]
+    wave: "Hard push to force him to miss minion if he ults away "
+
+---
+
+macro_advice:
+  early_game: >
+    Thin waves, take short trades, and play for level 3 spike. Land E on key 
+    cooldowns ( Renekton dash, Camille hookshot). Keep the wave in a 
+    threatening position to maximize pull angles.
+
+  mid_game: >
+    Push sides then look for R picks on enemy carries or key teamfight tarkets like a wukong. 
+    Mordekaiser becomes terrifying in skirmishes — force fights around dragons 
+    and Herald.
+
+  late_game: >
+    Identify the highest threat to your team and eliminate them with Realm of Death. 
+    Play with patience — flashing after the carry is often game-winning.
+
+common_mistakes:
+  - "Sitting on W for too long without using the shield"
+  - "Using R early instead of after summoners"
+  - "Overpushing without vision"
+  - "Using Q before confirming isolation"
+  - "overestimating your all in strength against other strong extended fight champions"
+
+feel_good_template: >
+  Mordekaiser reflects your unstoppable presence — every Realm of Death you cast 
+  shows you carry the same iron will as the Iron Revenant.
+

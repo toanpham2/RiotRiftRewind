@@ -1,0 +1,236 @@
+champion: Teemo
+role: Top
+archetype: ranged_bully
+
+identity_summary: >
+  Teemo is a lane-dominant ranged bully who wins through spacing, chip damage,
+  blind abuse, and wave tempo. He punishes immobile melee champions extremely
+  hard, controls brush with traps, and dictates trades through superior
+  movement speed. He falls off in coordinated fights but excels at
+  neutralizing bruisers, split-pushing, and map control.
+
+core_strengths:
+  - "Dominant early laning into melee champions"
+  - "Blind shuts down auto-based bruisers (Jax, Tryndamere, Yasuo)"
+  - "High poke & chase potential with Move Quick"
+  - "Unmatched brush/macro control with shrooms"
+  - "Easiest champ in the game to punish bad wave management"
+  - "Excellent at holding long lanes"
+
+core_weaknesses:
+  - "Very squishy and dies instantly to engages"
+  - "Falls off mid–late in 5v5s"
+  - "Struggles vs tanks with gap close"
+  - "Weak vs heavy sustain bruisers"
+  - "Predictable gameplan once ahead"
+  - "Requires perfect spacing"
+
+optimal_runes:
+  primary: "Domination"
+  keystone: "Dark Harvest"
+  primary_runes:
+    - Cheap Shot
+    - Sixth Sense
+    - Ultimate Hunter
+  secondary_tree: "Sorcery"
+  secondary_choices:
+    - Scorch
+    - Celerity
+  shards:
+    - Attack Speed
+    - Adaptive Force
+    - Flat Health
+
+alt_runes:
+  vs_tanks:
+    keystone: "Press the Attack"
+    notes: "More DPS for extended trades and shred"
+  vs_bruisers:
+    keystone: "Grasp of the Undying"
+    notes: "Sustain-focused lane survival"
+
+summoners:
+  default: ["Flash", "Ignite"]
+  vs_dive_or_jungle_pressure: ["Flash", "Exhaust"]
+  vs_range_or_safe_wave: ["Flash", "Teleport"]
+
+core_items:
+  core:
+    preferred: "Nashor's Tooth"
+    alt: ["Liandry's Torment", "Malignance", "Rabadon's Deathcap", "Shadowflame", "Mejai's Soulstealer"]
+    notes: "Go Mejai's if you are ahead and can snowball"
+  boots:
+    - Berserker's Greaves
+    - Sorcerer's Shoes
+    - Boots of Swiftness
+    - Plated Steelcaps
+    - Mercury Treads
+    - Ionian Boots of Lucidity
+  core_legendaries:
+    - Liandry's Torment
+    - Malignance
+    - Rabadon's Deathcap
+    - Shadowflame
+    - Mejai's Soulstealer
+
+situational_items:
+  vs_burst:
+    - "Zhonya's Hourglass"
+  vs_heavy_MR:
+    - "Void Staff"
+  vs_splitpush:
+    - "Rylai's Crystal Scepter"
+
+trading_pattern:
+  fundamentals: >
+    Your laning revolves around spacing, blind timing, and chip damage.
+    Abuse Q blind windows to negate all-in attempts while poking with E autos.
+  key_patterns:
+    - "Auto → Move Quick kite → Auto → back out"
+    - "Blind → 2–3 autos while enemy damage is negated"
+    - "Use brush control for stealth autos"
+  vs_melee:
+    - "Punish every CS attempt with auto + E poison"
+    - "Use Move Quick to escape all-ins"
+  vs_range:
+    - "Let wave push to you; avoid extended poke trades"
+
+wave_management:
+  level_1: "Auto every CS attempt; slow push into cheater recall"
+  vs_melees: "Freeze near tower to force doomed all-in attempts"
+  vs_ranged: "Let wave push to you; play safe"
+  shroom_macro:
+    - "Line defensive shrooms along jungle entrances"
+    - "Use shrooms to block flank angles during split push"
+    - "Use shrooms to help shove/crash waves when needed"
+
+jungle_coordination:
+  your_jg_ganks:
+    - "Low CC — only works with well-placed shrooms/slows"
+  enemy_jg_ganks:
+    - "Always track enemy jungle — very gankable"
+    - "Cast blind during gank to reduce incoming autos"
+    - "Post-6 shroom lines make ganks much harder"
+
+timing_spikes:
+  lvl1–3: "Strongest power window"
+  lvl6: "Shrooms enable macro control"
+  Nashor's: "Huge DPS spike"
+  Liandry's: "DoT + tank shred spike"
+  2_items: "Peak split-push pressure"
+  post20min: "Falls off in coordinated 5v5s (shrooms still hit hard)"
+
+matchups:
+
+  Darius:
+    difficulty: "Medium"
+    threats:
+      - "Ghost + Flash chase"
+    you_win_if: "You maintain distance and abuse blind"
+    trading:
+      - "Auto → kite → Blind during his engage"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Freeze near tower; Darius loses long lane"
+
+  Renekton:
+    difficulty: "Medium"
+    threats:
+      - "Dash + empowered W burst"
+      - "Dash + empowered Q heal/poke"
+      - "Level 6 stat check"
+      - "Can one-shot waves with E → Q(emp) → E"
+    you_win_if: "You kite his Fury windows"
+    trading:
+      - "Blind right before his W; punish with autos"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Keep wave near tower"
+
+  Aatrox:
+    difficulty: "Very Hard"
+    threats:
+      - "Q sweet spots"
+      - "Level 6 all-in"
+      - "High range zoning"
+    you_win_if: "You avoid Q sweet spots with spacing"
+    trading:
+      - "Blind → kite during Q casts; sidestep edges"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    note: "If he lands Q1 sweet spot, you often lose the entire trade"
+    wave: "If you have prio, slow push then freeze after crash; otherwise catch what you can"
+
+  Jax:
+    difficulty: "Very Easy"
+    threats:
+      - "Counter Strike"
+      - "Level 6 all-in"
+    you_win_if: "You Blind after E to ruin his trade"
+    trading:
+      - "Blind → kite → autos"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Freeze; he cannot farm safely"
+
+  Shen:
+    difficulty: "Easy"
+    threats:
+      - "Taunt + short trades"
+      - "Global pressure"
+    you_win_if: "You punish short trades and out-range him"
+    trading:
+      - "Blind after taunt to deny Q follow-up; trade back with autos"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Push him in so he loses ult tempo"
+
+  Sion:
+    difficulty: "Hard"
+    threats:
+      - "Infinite HP scaling"
+      - "E→W→Q combo if E lands"
+    you_win_if: "You chip endlessly without getting caught"
+    trading:
+      - "Use Move Quick to dodge E/Q; if E hits, back off"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Perma-push + harass (respect jungle)"
+
+  Ornn:
+    difficulty: "Medium–Easy"
+    threats:
+      - "Brittle burst combo"
+    you_win_if: "You poke relentlessly early"
+    trading:
+      - "Blind to negate brittle punishment window"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Cheater recall → freeze if you have control (can be hard; he one-shots waves)"
+
+  Volibear:
+    difficulty: "Medium–Easy"
+    threats:
+      - "Early all-in with Q"
+      - "Respect his all-in at all stages"
+    you_win_if: "You Blind + kite his engage; never get hit by Q/W/E"
+    trading:
+      - "Auto → kite → Blind his Q or E → follow-up autos"
+    items: ["Sorcerer's Shoes", "Nashor's Tooth", "Liandry's Torment"]
+    wave: "Freeze; he overextends. Shroom behind you when pushed up."
+
+macro_advice:
+  early_game: >
+    Abuse range advantage to generate leads. Track jungle at all times and
+    avoid pushing without vision. Teemo has immense early zone control.
+
+  mid_game: >
+    Use shrooms for area denial. Play side lanes and force enemies to overinvest
+    to catch you. Avoid grouped fights unless ahead.
+
+  late_game: >
+    Shift from poke to trap-based zoning. Your power comes from flanks,
+    Blind timings, and catching mispositions — not front-to-back fights.
+
+common_mistakes:
+  - "Pushing without vision → free ganks"
+  - "Burning Blind too early"
+  - "Fighting extended vs tanks"
+  - "Overcommitting to kills instead of wave priority"
+
+feel_good_template: >
+  Teemo mirrors your cunning — every poke, every trap shows you win through
+  superior strategy and flawless spacing.

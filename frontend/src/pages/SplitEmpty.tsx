@@ -1,4 +1,5 @@
 import SplitHeader from "../components/SplitHeader";
+import { useDdragonVersion, champIconURL } from "../lib/ddragon";
 
 export default function SplitEmpty() {
   return (
@@ -32,7 +33,14 @@ export default function SplitEmpty() {
               <div className="h-[3px] w-full rounded-t-[18px] bg-gradient-to-r from-lolGold/40 via-lolGold to-lolGold/40 mb-6" />
 
               {/* Placeholder Zilean art box */}
-              <div className="mx-auto mb-6 h-40 w-40 rounded-xl bg-white/5 border border-white/15" />
+              {/* before: */}
+              {/* <div className="h-36 w-36 rounded-2xl bg-white/5 border border-white/10 mx-auto" /> */}
+
+              {/* after: */}
+              <div className="mx-auto my-6">
+                <ZileanIcon size={144} />
+              </div>
+
 
               <h2 className="text-xl font-extrabold text-lolGold mb-2">
                 Even Zilean can’t rewind this far…
@@ -47,3 +55,22 @@ export default function SplitEmpty() {
       </div>
   );
 }
+
+function ZileanIcon({ size = 144 }: { size?: number }) {
+  const version = useDdragonVersion();
+  return (
+      <img
+          src={champIconURL("Zilean", version)}
+          alt="Zilean"
+          width={size}
+          height={size}
+          className="mx-auto mb-6 h-40 w-40 rounded-xl border-2 border-lolGold shadow-[0_0_22px_rgba(201,168,106,0.3)] object-cover bg-black/40"
+          loading="lazy"
+          onError={(e) => {
+            // fallback to a local asset if you have one
+            (e.currentTarget as HTMLImageElement).src = "/champs/zilean.png";
+          }}
+      />
+  );
+}
+

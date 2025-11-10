@@ -1,0 +1,26 @@
+archetype: "juggernaut"
+strengths:
+  - Massive zone of control
+  - High durability and burst as well as ramp up damage in melee range
+weaknesses:
+  - Poor mobility
+  - Weak against kiting and resets
+early_game:
+  - Don’t take extended trades; poke and disengage
+mid_game:
+  - Rotate away from their lane to avoid isolated fights or bring teammates to take them down
+late_game:
+  - Keep distance; peel for your carries
+win_conditions:
+  - Force them to chase into your team
+lose_conditions:
+  - Fighting them front-to-back without kiting tools
+how_you_win:
+  - Hit and run; deny all-in angles
+how_you_lose:
+  - Letting them walk into you with Flash up
+common_mistakes:
+  - Fighting them in small chokes, letting them ramp up their damage
+  - Fighting them in extended melee range fights
+tips_for_this_player:
+  - If you’re tank, delay the fight; if you’re DPS, stay max range

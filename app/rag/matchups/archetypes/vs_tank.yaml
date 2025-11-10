@@ -1,0 +1,29 @@
+archetype: "tank"
+strengths:
+  - High durability and strong engage tools
+  - Crowd control that punishes mispositioning
+  - Scales well into teamfights even if behind
+weaknesses:
+  - Weak early damage
+  - Long cooldowns on engage abilities
+  - Struggles with extended DPS
+early_game:
+  - get wave control against them
+  - Harass between cooldowns
+  - Can either freeze wave infront of your tower to force a trade or stack into crash wave to take plates and proxy to get tempo
+mid_game:
+  - Avoid clumping; punish failed engages
+late_game:
+  - Play front-to-back; don’t burn cooldowns into their tank
+win_conditions:
+  - Kite them out and force them to re-engage multiple times
+lose_conditions:
+  - Taking all-in fights into full tank items
+how_you_win:
+  - Drag fights out and punish missed abilities
+how_you_lose:
+  - Getting engaged on without vision or spacing
+common_mistakes:
+  - Trading into tanks during their ability windows
+tips_for_this_player:
+  - Track their main CC cooldown; it defines every fight

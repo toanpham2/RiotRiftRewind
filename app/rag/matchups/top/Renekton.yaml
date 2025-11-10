@@ -1,0 +1,228 @@
+champion: Renekton
+role: Top
+archetype: bruiser
+
+identity_summary: >
+  Renekton is a lane tyrant who plays around Fury management, bursty short
+  trades, and wave-tempo control. He spikes at levels 3 and 6 and converts
+  wave states into dives/skirmishes. Use burst-and-disengage patterns unless the
+  target lacks tools to fight back.
+
+core_strengths:
+  - "Elite short-trade burst with empowered W"
+  - "Among the strongest level-3 and level-6 champions"
+  - "High dive threat with R + Fury + wave setup"
+  - "Punishes weak early melee patterns"
+  - "Controls lane tempo (freeze/crash at will)"
+
+core_weaknesses:
+  - "Falls off if not ahead"
+  - "Struggles vs heavy poke/disengage"
+  - "Bad into high-armor stackers without Cleaver"
+  - "Requires smart Fury + jungle tracking"
+
+optimal_runes:
+  primary: "Precision"
+  keystone: "Conqueror"
+  secondary_runes:
+    - Triumph
+    - Legend: Tenacity
+    - Last Stand
+  secondary_tree: "Resolve"
+  secondary_choices:
+    - Second Wind
+    - Bone Plating
+    - Demolish
+    - Unflinching
+  shards:
+    - Adaptive Force
+    - Adaptive Force
+    - Flat Health
+
+alt_runes:
+  vs_range:
+    keystone: "Fleet Footwork"
+    notes: "Into Quinn/Jayce/Kennen for sustain."
+  vs_burst_melees:
+    keystone: "Press the Attack"
+    notes: "Maximizes short-trade pop with Ignite."
+
+summoners:
+  default: ["Flash", "Teleport"]
+  kill_pressure_lane: ["Flash", "Ignite"]
+  heavy_range: ["Flash", "Teleport"]
+
+core_items:
+  core:
+    preferred: "Eclipse"
+    alt:
+      - "Black Cleaver"
+      - "Spear of Shojin"
+      - "Stridebreaker"
+      - "Blade of the Ruined King"
+    notes: "Cleaver vs heavy armor; Shojin for haste/durability; Stride vs range; BotRK vs HP stackers."
+  boots:
+    - Plated Steelcaps
+    - Mercury Treads
+    - Ionian Boots of Lucidity
+  core_legendaries:
+    - Sterak’s Gage
+    - Death’s Dance
+    - Maw of Malmortius
+    - Guardian Angel
+
+situational_items:
+  vs_full_tank:
+    - "Black Cleaver"
+    - "Sterak's Gage"
+  vs_AP_burst:
+    - "Maw of Malmortius"
+    - "Spirit Visage"
+  vs_AD_burst:
+    - "Death’s Dance"
+    - "Randuin's Omen"
+
+trading_pattern:
+  fundamentals: >
+    Enter trades with Fury for empowered W or Q (or E shred). Core short trade:
+    E1 → AA → W(emp) → Q → AA → E2 out. Don’t overstay unless they cannot
+    respond or you have big wave advantage. 50+ Fury combo: AA → W(emp)(anim-cancel) → R.
+  key_points:
+    - "Empowered W is the burst; save Fury for it"
+    - "Q/Q(emp) = sustain+push; beware of ganks"
+    - "Use double E to enter/exit; keep E2 for escapes when dark"
+    - "Track cooldowns; win when mobility is down"
+
+wave_management:
+  level_1: >
+    Fight for early control. Options:
+    (a) Slow push 1–2, crash 3 then crash 4 for recall; or
+    (b) Hard trade 1–2, dive on wave-3 with Ignite; or
+    (c) Crash 3, trade on wave-4 bounce.
+  vs_melees: "Freeze after first crash; force walk-ups into Fury trades"
+  vs_ranged: "Thin early; avoid big bounces into poke zone"
+  dive_setup: "Stack wave; crash with full Fury → W(emp) → R dive"
+
+jungle_coordination:
+  when_you_call_gank:
+    - "Freeze near your side with Fury"
+    - "E1 to force flash; W to lock"
+    - "Time R for dives; tank after key cooldowns"
+  when_enemy_ganks:
+    - "Hold E2 for disengage"
+    - "Play in your wave to W cancel gap closers"
+    - "Don’t spam Q on wave when dark"
+
+timing_spikes:
+  lvl3: "Full-combo lethal on most melee"
+  lvl6: "Massive dive threat & sustain"
+  first_item: "Eclipse spike"
+  lvl11: "Last notable level spike"
+
+matchups:
+  Aatrox:
+    difficulty: "High even — skill"
+    threats:
+      - "Out-trades after your burst if he spaces Qs"
+      - "Q sweet spots can stuff your E timing"
+    you_win_if: >
+      Burn Q1/E with movement, enter with 50+ Fury, E his Q2/Q3, space properly.
+    avoid_when: "He has passive + Qs and you lack Fury"
+    trading:
+      short_trade: "E1 → W(emp) → Q → E2 out"
+      dont_do: "Predictable E paths; engaging without Fury"
+    wave:
+      plan: "Slow push; punish thins"
+    items: ["Plated Steelcaps", "Eclipse", "Executioner's Calling", "Spear of Shojin", "Black Cleaver", "Sterak's Gage", "Death’s Dance"]
+    jungle_tips: "Bait Q1/Q2 before committing to 2v2; with R you usually win."
+
+  Camille:
+    difficulty: "Easy–Skill"
+    threats:
+      - "Q2 true damage outscales later"
+      - "E stun punishes missteps; passive shield"
+    you_win_if: "Dodge E with E1/E2 or buffer W; avoid W sweet spot with movement/E."
+    trading:
+      pattern: "Emp W breaks shield; if it breaks, you won the trade"
+    wave:
+      plan: "Don’t permafreeze; trade on 4th-wave bounce or dive with Fury"
+    items: ["Plated Steelcaps", "Eclipse", "Death’s Dance", "Spear of Shojin", "Black Cleaver", "Sterak's Gage"]
+
+  Darius:
+    difficulty: "Hard — skill"
+    threats:
+      - "Level-1/3 cheese; Apprehend punishes E"
+    you_win_if: "Avoid pulls, maintain minion advantage, short trade only."
+    trading:
+      instructions:
+        - "Short trades ONLY"
+        - "E his Q outer edge to deny heal"
+        - "Never fight at 5 stacks"
+        - "Level-1: start Q or E depending on cheese; play for level-2 prio"
+        - "Level-6: your all-in can win if pre-poked"
+    jungle:
+      notes: "Freeze and call jungler — he must overextend."
+    items: ["Plated Steelcaps", "Eclipse", "Death’s Dance", "Spear of Shojin", "Black Cleaver", "Sterak's Gage"]
+
+  Fiora:
+    difficulty: "Medium — heavy skill"
+    threats:
+      - "Riposte (W) destroys empowered W"
+      - "Infinite sustain in long fights"
+    you_win_if: "Bait W first; zone vitals; trade with Q and W timings."
+    trading:
+      tips:
+        - "Use W unpredictably or after her W; trade with Q/Emp Q on wave"
+        - "Level-6 can be yours if you deny vitals"
+    items: ["Plated Steelcaps", "Eclipse", "Death’s Dance", "Spear of Shojin", "Black Cleaver", "Sterak's Gage"]
+
+  Jax:
+    difficulty: "Even — skill"
+    threats:
+      - "E (Counter Strike) negates your W"
+      - "Outscales in long fights/sidelane"
+    you_win_if: "Force trades when E is down; deny CS/XP."
+    trading:
+      instructions:
+        - "Q poke; give only 1 auto into E; after his E ends → E1 in → W(emp) → E2 out"
+        - "You win level-6 all-ins if you track his E"
+    items: ["Plated Steelcaps", "Eclipse", "Death’s Dance", "Spear of Shojin", "Black Cleaver", "Sterak's Gage"]
+
+  K'Sante:
+    difficulty: "Medium"
+    threats:
+      - "Post-6 all-in; W displacement; armor stacking"
+    you_win_if: "Chunk early; out-sustain his mana; avoid W."
+    trading: "Break shield with W(emp); sidestep W/Q; remember W resets after ult."
+    items: ["Black Cleaver", "Goredrinker"]
+
+  Malphite:
+    difficulty: "Easy"
+    threats:
+      - "Armor stacking; Q poke"
+    you_win_if: "Rush Cleaver; level-6 all-in wins (mixed damage)."
+    items: ["Plated Steelcaps", "Black Cleaver", "Eclipse", "Death’s Dance", "Spear of Shojin", "Sterak's Gage"]
+
+  Riven:
+    difficulty: "Easy"
+    threats:
+      - "Mobility overload; strong scaling in hands of experts"
+    you_win_if: "Play passive level-1; from level-3 you win; buffer W through her Q3/W."
+    trading:
+      tip: "Buffer W during Q3 or her W; Q on wave for prio + heal"
+    items: ["Plated Steelcaps", "Eclipse", "Death’s Dance", "Spear of Shojin", "Black Cleaver", "Sterak's Gage"]
+
+  Sett:
+    difficulty: "Easy"
+    threats:
+      - "True-damage W; E pull guarantees W"
+    you_win_if: "Bait/avoid E; sidestep W; break W shield with W(emp)."
+    trading: "Q on wave; dance in/out of E range; after E down → you win"
+    items: ["Plated Steelcaps", "Eclipse", "Death’s Dance", "Spear of Shojin", "Black Cleaver", "Sterak's Gage"]
+
+  Ambessa:
+    difficulty: "Easy"
+    threats:
+      - "W shield tanks burst; good spacing with dashes"
+    you_win_if: "Break W shield with W(emp) then commit; R stat-checks."
+    items: ["Black Cleaver", "Goredrinker"]

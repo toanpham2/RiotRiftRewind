@@ -1,0 +1,7 @@
+archetype: "sustain"
+
+during lane:
+  - Buy early anti-heal; force quick trades or poke to keep the anti heal up
+after lane:
+  - CC them down and burst them before they get to heal up or play at range and deny the healing from drain tank champs
+
