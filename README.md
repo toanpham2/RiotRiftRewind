@@ -34,8 +34,8 @@ Because the backend performs full-match historical analysis and AI-powered break
 
 If you see a temporary 502 or Router External Target error on the FIRST run:
 
-- Wait 2–5 minutes for Quick Rewind
-- Wait 5–10 minutes for Full Rewind
+- Wait 3–5 minutes for Quick Rewind
+- Wait 5–12 minutes for Full Rewind
 - Click the button again, the request will succeed once the backend is warm.
 
 This is normal behavior for serverless deployments using free-tier hosting, where backend containers spin down when idle.
