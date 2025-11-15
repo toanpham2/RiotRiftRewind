@@ -114,12 +114,14 @@ This behavior is normal for free-tier serverless hosting.
 # Features
 
 ### Match Analysis
+- Full rewind for year wise analysis
+- Quick rewind (most recent 100 matches for purpose of testing)
 - Fetches full match history via Riot Match V5  
 - Role and champion detection  
 - Trading & laning metrics  
 - Wave control & macro evaluation  
 - Objective impact tracking  
-- Win conditions & risk mapping  
+- Win conditions & risk mapping 
 
 ### AI Coaching via AWS Bedrock
 - Personalized gameplay breakdown  
